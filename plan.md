@@ -24,25 +24,80 @@ During implementation, follow the approved plan in working checkpoints and keep 
 
 ## Approach
 
-Summarize the structure, data flow, dependencies, task order, and main risks.
+**Stack:** Vanilla HTML/CSS/JS (ES modules), no build step, no framework, no `package.json`. Matches the static/no-backend requirement (R25) and deploys as-is to GitHub Pages. Screens are plain DOM sections shown/hidden by a small router; no component library is needed for four screens plus error states.
+
+**Structure:**
+- `index.html` + one CSS file (color-blocked, breakpoint-driven layout per R20).
+- `js/state.js` — the single recommendation-state object and its recompute function (condition → temperature band → reminders → variant selection), per spec's Recommendation state and data flow.
+- `js/weather.js` — Open-Meteo geocoding + forecast fetch wrapper; isolates the one external dependency.
+- `js/location.js` — manual entry, device geolocation, `localStorage` read/write/clear for the most recent location (R1–R4).
+- `js/variants.js` — `localStorage` read/write for per-date outfit/reminder variant persistence (spec Content variation).
+- `js/screens/` — one module per screen (main, date picker, trip overview, info, location entry, error states), each a render function driven entirely by the shared state.
+- `assets/` — character/outfit art, icons, atmospheric effect SVG/CSS, spinner.
+
+**Data flow:** location + date → `weather.js` fetch → raw weather values → `state.js` derives condition, temperature band, reminders → `variants.js` resolves (or assigns and stores) outfit/reminder variants for that date → one recommendation-state object → every screen renders from that object, never from raw weather or ad hoc logic.
+
+**Dependencies:** Open-Meteo geocoding + forecast APIs (network); browser Geolocation API; `localStorage`; nonemo's CC0 character pack and Material Symbols icons (static assets, no runtime dependency).
+
+**Task order and rationale:** assets and the weather/state layer come first since every screen renders from them; main screen (the core user story) before the secondary screens (date picker, trip overview) it depends on; error/loading states alongside the screens that trigger them, not bolted on after; accessibility and responsive layout checked per screen as it's built, then re-verified as a pass; deployment early enough to test the real GitHub Pages URL before usability testing, not just at the very end.
+
+**Main risks:** Open-Meteo field names/units for apparent temperature, precipitation type, and heat index need confirming against the live API response before `state.js` is written against assumed field names; geolocation permission UX varies by browser and needs manual testing on a real phone; the multi-select touch (press-and-hold) vs. mouse (left-click) interaction on the date picker is the most novel UI piece and may need iteration once built.
 
 ## Checklist
 
 ### Approvals
 
-- [ ] Research approved
-- [ ] Specification approved
-- [ ] Plan approved
+- [x] Research approved
+- [x] Specification approved
+- [x] Plan approved
 
 ### Build
 
-- [ ] Create or source the assets listed in `spec.md`, starting early
-- [ ] Replace this line with ordered tasks that name the result of each step
+- [ ] Create or source the assets listed in `spec.md`, starting early: 15 complete outfit images from nonemo's pack (3 × 5 temperature bands), 6 Material Symbols icons, 3 custom atmospheric effects, 1 spinner
 - [ ] Use the approved screen drawings to guide layout and interaction work
 - [ ] Keep one recommendation state driving every visual and written output
+
+**Checkpoint 1 — static shell and weather data**
+- [ ] Static project scaffold (`index.html`, CSS, `js/` structure) with placeholder screens, committed and openable locally with no build step
+- [ ] `weather.js` fetches Open-Meteo geocoding and current + 7-day forecast for a hardcoded location, with fields logged to confirm real API field names/units for apparent temperature, precipitation probability/type, wind speed, UV index, and heat index
+
+**Checkpoint 2 — recommendation state**
+- [ ] `state.js` computes condition (Snowy > Rainy > Windy > Clear), temperature band, and reminders from fetched weather, matching the spec's priority order and thresholds
+- [ ] `variants.js` assigns and persists outfit/reminder variants per date in `localStorage`; reloading or revisiting a date returns the same variants instead of re-rolling, per spec's Persistence rule
+
+**Checkpoint 3 — location**
+- [ ] Manual location entry resolves via Open-Meteo geocoding to coordinates + display name (R1)
+- [ ] Device geolocation path fetches weather for device coordinates and labels it "Your location" (R2)
+- [ ] Most-recent-location persistence in `localStorage`, overwritten on each new selection (R3)
+
+**Checkpoint 4 — main screen**
+- [ ] Main screen renders location, date, temperature range, Open-Meteo credit label, character + outfit variant, atmospheric effect overlay when condition ≠ Clear, written recommendation, and reminder badges — all from the one recommendation-state object (R7–R10)
+- [ ] Loading state (blank color-blocked background + spinner) shown while weather is fetching (R16)
+- [ ] Phone layout usable one-handed; laptop layout uses a side-by-side arrangement, not a scaled-up phone layout (R20)
+
+**Checkpoint 5 — date picker and trip overview**
+- [ ] Date picker lists the 7 forecast days with icon + condition text, dates outside range unreachable (R5, R6, R11)
+- [ ] Single-day navigation: tap / right-click opens main screen for that date (R12)
+- [ ] Multi-select: press-and-hold / left-click enters range-building mode, additional taps/clicks extend it, "OK" confirms (R13)
+- [ ] Trip overview screen shows the selected range with one representative outfit per day, and opens the main screen's full detail on day selection (R14)
+
+**Checkpoint 6 — info screen and error/location states**
+- [ ] Info screen with all five disclosures (creator, Open-Meteo/NOAA source, recommendation rules, privacy including the 90-day Open-Meteo retention note, art credits) and the clear-saved-location control (R4, R15, R27, R28)
+- [ ] Location permission denied, weather-unavailable-with-retry, and location-not-found states each render distinctly instead of a blank/broken screen (R17–R19)
+- [ ] Back navigation from info and location-entry screens returns to the main screen
+
+**Checkpoint 7 — accessibility and responsive pass**
+- [ ] All interactive elements measured at ≥24×24 CSS px (R21)
+- [ ] Text/icon contrast checked against every color-blocked background used (R22)
+- [ ] Screen reader announces recommendation text alongside each icon (R23)
+- [ ] Grayscale screenshot check confirms reminder/condition meaning survives without color (R24)
+- [ ] Breakpoint swap between phone and laptop layouts verified with no overlapping/broken content
+
+**Checkpoint 8 — deploy**
+- [ ] Deployed to GitHub Pages at a public HTTPS URL, loading with no build step required by the visitor (R29)
+
 - [ ] Test and fix each checkpoint against the specification before starting the next
 - [ ] Commit meaningful working checkpoints
-- [ ] Deploy to a public HTTPS URL
 
 ### Verify and revise
 
