@@ -1,0 +1,6 @@
+/* Checkpoint 1: minimal shell. Color-blocked layout comes in Checkpoint 4. */
+body { margin: 0; font-family: system-ui, sans-serif; }
+.screen { padding: 1rem; }
+.screen[hidden] { display: none; }
+.dev-nav { padding: 1rem; }
+.dev-nav a { display: inline-block; min-width: 24px; min-height: 24px; margin-right: .5rem; }

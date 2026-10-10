@@ -58,8 +58,8 @@ During implementation, follow the approved plan in working checkpoints and keep 
 - [ ] Keep one recommendation state driving every visual and written output
 
 **Checkpoint 1 — static shell and weather data**
-- [ ] Static project scaffold (`index.html`, CSS, `js/` structure) with placeholder screens, committed and openable locally with no build step
-- [ ] `weather.js` fetches Open-Meteo geocoding and current + 7-day forecast for a hardcoded location, with fields logged to confirm real API field names/units for apparent temperature, precipitation probability/type, wind speed, UV index, and heat index
+- [x] Static project scaffold (`index.html`, CSS, `js/` structure) with placeholder screens, committed and openable locally with no build step
+- [x] `weather.js` fetches Open-Meteo geocoding and current + 7-day forecast for a hardcoded location, with fields logged to confirm real API field names/units for apparent temperature, precipitation probability/type, wind speed, UV index, and heat index
 
 **Checkpoint 2 — recommendation state**
 - [ ] `state.js` computes condition (Snowy > Rainy > Windy > Clear), temperature band, and reminders from fetched weather, matching the spec's priority order and thresholds
@@ -124,6 +124,8 @@ Before testing, record the purpose, a few realistic tasks, non-leading prompts, 
 ## Revisions
 
 Record material plan changes and why they were made.
+
+- **2026-10-10 — Checkpoint 1 done (Developer-verified in browser).** Live API check found no heat index field; hydration reminder now uses daily max apparent temperature ≥ 90°F (see `spec.md` Revisions). Asset pack unzipped directly into `assets/` (not a subfolder). `dev-check.html` is a temporary API check page; remove it once `state.js` exists.
 
 ## Saving transcripts
 

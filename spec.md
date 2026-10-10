@@ -115,7 +115,7 @@ Translate every fixed brief requirement and the selected research-driven feature
 
 Define the weather inputs, recommendation categories, coded rules, and shared state. Weather values must come from the provider, and rules must follow the weather guidance cited in `research.md`. The selected location, date, and live weather data must produce one recommendation state that drives every visual and written output.
 
-**Weather inputs** (fetched from Open-Meteo for the selected location and date): apparent ("feels like") temperature, precipitation probability, precipitation type, sustained wind speed, UV index, heat index.
+**Weather inputs** (fetched from Open-Meteo for the selected location and date): apparent ("feels like") temperature, precipitation probability, precipitation type, sustained wind speed, UV index. (Open-Meteo has no heat index field; apparent temperature is used in its place, see Revisions.)
 
 **Condition category** (one of four, checked in priority order — the first match wins):
 1. **Snowy** — precipitation type = snow.
@@ -125,7 +125,7 @@ Define the weather inputs, recommendation categories, coded rules, and shared st
 
 **Temperature band** (one of five, by apparent temperature): Hot (≥ 85°F), Warm (70–84°F), Mild (55–69°F), Cool (40–54°F), Cold (< 40°F).
 
-**Reminders** (independent booleans, any number can be active at once): Umbrella (precipitation probability ≥ 30%), Sunscreen (UV index ≥ 3), Extra hydration (heat index ≥ 90°F).
+**Reminders** (independent booleans, any number can be active at once): Umbrella (precipitation probability ≥ 30%), Sunscreen (UV index ≥ 3), Extra hydration (daily maximum apparent temperature ≥ 90°F).
 
 **Recommendation state** — one object, recomputed whenever the location or date changes, that drives every visual and written output on the main screen and trip overview:
 
@@ -182,6 +182,8 @@ Record features intentionally excluded from this project.
 ## Revisions
 
 After implementation or testing, record requirement changes and the evidence that prompted them. Update the screen drawings when a material layout or interaction changes.
+
+- **2026-10-10 — Heat index replaced by apparent temperature.** A live Open-Meteo forecast response (Austin, TX) contains no heat index field. The Extra hydration reminder now triggers on daily maximum apparent temperature ≥ 90°F, which already incorporates humidity. Developer chose this over computing the NWS heat index (Checkpoint 1).
 
 ## Approval
 
