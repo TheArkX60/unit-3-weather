@@ -127,13 +127,13 @@ Evidence status as of 2026-10-11. **Verified** means a check was run and recorde
 | R2 | Device location loads weather and shows "Your location" | Developer, local (CP3) and live phone (CP8) | Verified | none |
 | R3 | Selecting B after A, reload shows B | Developer, local: Dallas replaced Austin (CP3); live reload kept location (CP8) | Verified | none |
 | R4 | Clear control removes saved location; next visit prompts | Developer, local (CP6) | Verified | optionally repeat on live |
-| R5 | A date 3 days out shows that day's forecast, not today's | Day navigation works (CP5); data not compared to a source | Open | open a day 3 out and compare its range and condition to Open-Meteo's own page for the same coordinates |
+| R5 | A date 3 days out shows that day's forecast, not today's | Agent computed expected values for Austin from Open-Meteo (2026-10-11) with an independent script; Developer opened Wed Oct 14 on the live site and it showed that date, Rainy, about 80-95 F, and umbrella, sunscreen, hydration | Verified | none |
 | R6 | No control reaches day 8 or a past date | Date picker lists only 7 days (CP5); unit test drops out-of-range trip dates; Developer typed `#main/2030-01-01` and `#main/2020-01-01` on the live site (2026-10-11) and both showed Today | Verified | none |
 | R7 | Location, date, F range, Today vs forecast label | Developer viewed today and forecast dates (CP4/5) | Verified | none |
 | R8 | "Open-Meteo" label under summary, away from character | Developer (CP4) | Verified | none |
 | R9 | Character in outfit from state; effect when not Clear | Developer, all 4 conditions x 5 bands via preview (CP4) | Verified | none |
 | R10 | Recommendation and reminders with icon and text | Developer (CP4); automated icon/text pairing 0 failures (CP7) | Verified | none |
-| R11 | Picker icon and text match the live forecast's primary condition | List viewed; comparison with Open-Meteo for Austin (2026-10-11) showed overcast days labelled Clear, so Cloudy was added (see `spec.md` Revisions); Developer confirmed Cloudy appears on localhost | Open | after the Cloudy change is deployed, compare the 7 rows to the expected table for Austin (conditions and ranges within about 2 F) |
+| R11 | Picker icon and text match the live forecast's primary condition | Comparison with Open-Meteo for Austin (2026-10-11) showed overcast days labelled Clear, so Cloudy was added (see `spec.md` Revisions); Developer confirmed Cloudy on localhost | Verified | none (after Cloudy was deployed, Developer compared all 7 live rows to the expected table for Austin: conditions and ranges matched within about 2 F, 2026-10-11) |
 | R12 | Tap / right-click opens that day | Developer: mouse and phone mode (CP5), live phone (CP8) | Verified | none |
 | R13 | Hold / left-click starts multi-select; taps add; OK confirms | Developer: mouse and phone mode (CP5), live phone (CP8) | Verified | none |
 | R14 | 3-day selection shows exactly 3 rows, each opens its day | Developer (CP5); unit test for 3 trip dates | Verified | none |
