@@ -87,10 +87,10 @@ During implementation, follow the approved plan in working checkpoints and keep 
 - [x] Back navigation from info and location-entry screens returns to the main screen
 
 **Checkpoint 7 — accessibility and responsive pass**
-- [ ] All interactive elements measured at ≥24×24 CSS px (R21)
-- [ ] Text/icon contrast checked against every color-blocked background used (R22)
-- [ ] Screen reader announces recommendation text alongside each icon (R23)
-- [ ] Grayscale screenshot check confirms reminder/condition meaning survives without color (R24)
+- [x] All interactive elements measured at ≥24×24 CSS px (R21)
+- [x] Text/icon contrast checked against every color-blocked background used (R22)
+- [x] Screen reader announces recommendation text alongside each icon (R23)
+- [x] Grayscale screenshot check confirms reminder/condition meaning survives without color (R24)
 - [ ] Breakpoint swap between phone and laptop layouts verified with no overlapping/broken content
 
 **Checkpoint 8 — deploy**
@@ -133,6 +133,7 @@ Record material plan changes and why they were made.
 - **2026-10-11 — Checkpoint 4 done (Developer-verified in browser, phone and laptop widths).** Decisions: background color follows the condition; laptop layout is side-by-side (the laptop drawing showed a centered stack, which conflicted with R20 and the brief); on phone the date, location, and an added "About" link sit in a bottom bar for one-handed reach; text sits on a 55% dark scrim above the weather effect (black text failed contrast at 3.2-3.7:1; white text over an effect line passes at 5.3:1 worst case). Sunscreen reminder is hidden at 60%+ rain chance (see `spec.md` Revisions). **Temporary dev files to delete before delivery:** `js/demo.js`, `demo-links.html`, the two `demo` lines in `js/main.js`, `outfits.html`, `assets-review.html`, `dev-check.html`, `tests.html` (keep tests until the end), (the placeholder nav was removed in Checkpoint 6). Also temporary: the `?demo=unavailable` check at the top of `forecastFor` in `js/main.js`.
 - **2026-10-11 — Checkpoint 5 done (Developer-verified in browser, mouse and phone mode).** Choices: trip range is any set of tapped days shown in date order; right-click on date rows opens the day (browser menu suppressed on rows only); a touch/mouse hint line and a "Plan a trip" button were added (keyboard and assistive-tech alternative to press-and-hold, not in the spec); list screens summarize days without rolling variants, so a date's random variants are only chosen when it is opened; trip rows use variant 1 of the band as the representative outfit. Debugging note: several stray `http.server` processes on port 8000 served stale files and hid CSS changes; `scripts/serve.py` (no-cache) now replaces them, run with `python scripts/serve.py`.
 - **2026-10-11 — Checkpoint 6 done (Developer-verified in browser).** Info screen has the five disclosures plus Clear saved location; three separate error screens (character not found, location denied, weather unavailable with Try again) replace the earlier inline text; Back works on Info and Location; the placeholder nav was removed. R26 was widened to cover stored variant choices (see `spec.md` Revisions). **Still to verify:** the real browser-denial path could not be triggered by the Developer, so only the denied screen itself was checked (via `#error/denied`). Test it on a real phone by tapping "Don't Allow" on the location prompt, as part of the deployed-app phone test in Verify and revise.
+- **2026-10-11 — Checkpoint 7 mostly done.** R21 (targets), R22 (contrast, including worst case with a white effect line behind the 55% scrim), image/icon text (R23), and horizontal overflow at 360/393/899/900/1280px all passed in `a11y-check.html` (55 measurements, 0 failures; Developer ran it). R23 was also checked by the Developer with Windows Narrator and R24 with Edge's Achromatopsia emulation; both passed. **Still open:** the breakpoint-swap item (visual check that nothing overlaps while resizing through 900px) awaits the Developer. `a11y-check.html` is a temporary dev page; remove before delivery.
 
 ## Saving transcripts
 
