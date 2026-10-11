@@ -19,10 +19,6 @@ let cachedForecast = null;
 let retryHash = '#main';
 
 async function forecastFor(saved) {
-  // TEMPORARY dev preview (see js/demo.js): ?demo=unavailable simulates a failed forecast request.
-  if (new URLSearchParams(location.search).get('demo')?.split(',').includes('unavailable')) {
-    throw new Error('demo: weather unavailable');
-  }
   const key = `${saved.latitude},${saved.longitude}`;
   if (cachedForecast?.key !== key) {
     cachedForecast = { key, data: await fetchForecast(saved.latitude, saved.longitude) };
@@ -68,10 +64,7 @@ async function showMain(requestedDate) {
     const today = data.daily.time[0]; // today in the location's own time zone
     // Dates outside the 7-day forecast fall back to today (R6).
     const date = data.daily.time.includes(requestedDate) ? requestedDate : today;
-    let day = dayFromForecast(data.daily, date);
-    const demo = new URLSearchParams(location.search).get('demo'); // TEMPORARY dev preview, see js/demo.js
-    if (demo) day = (await import('./demo.js')).demoDay(demo, date);
-    const state = buildState({ location: saved.name, date, day });
+    const state = buildState({ location: saved.name, date, day: dayFromForecast(data.daily, date) });
     renderMain(state, today);
   } catch {
     if (location.hash === startHash) showError('unavailable', '', startHash); // ignore if the user already moved on
