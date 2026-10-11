@@ -94,10 +94,10 @@ During implementation, follow the approved plan in working checkpoints and keep 
 - [x] Breakpoint swap between phone and laptop layouts verified with no overlapping/broken content
 
 **Checkpoint 8 — deploy**
-- [ ] Deployed to GitHub Pages at a public HTTPS URL, loading with no build step required by the visitor (R29)
+- [x] Deployed to GitHub Pages at a public HTTPS URL, loading with no build step required by the visitor (R29)
 
 - [ ] Test and fix each checkpoint against the specification before starting the next
-- [ ] Commit meaningful working checkpoints
+- [x] Commit meaningful working checkpoints
 
 ### Verify and revise
 
@@ -136,6 +136,7 @@ Record material plan changes and why they were made.
 - **2026-10-11 — Checkpoint 7 mostly done.** R21 (targets), R22 (contrast, including worst case with a white effect line behind the 55% scrim), image/icon text (R23), and horizontal overflow at 360/393/899/900/1280px all passed in `a11y-check.html` (55 measurements, 0 failures; Developer ran it). R23 was also checked by the Developer with Windows Narrator and R24 with Edge's Achromatopsia emulation; both passed. **Still open:** the breakpoint-swap item (visual check that nothing overlaps while resizing through 900px) awaits the Developer. `a11y-check.html` is a temporary dev page; remove before delivery.
 - **2026-10-11 — Checkpoint 7 done.** Breakpoint swap checked by the Developer at rest on phone presets and tablet/laptop sizes (stacked layout below 900px, side-by-side from 900px). While dragging the DevTools device frame, a white strip and shifted content appeared; screenshot evidence showed it only during the drag and not at rest, so it was treated as a DevTools redraw artifact, not an app bug. The related fix kept: the main screen is now at least one screen tall (character height from the window height) so the colored background grows with content and short windows scroll instead of clipping. **Pending:** re-run `a11y-check.html` once after this CSS change (Developer).
 - **2026-10-11 — Pre-deploy cleanup (Developer approved).** Removed the temporary dev files `js/demo.js`, `demo-links.html`, `outfits.html`, `assets-review.html`, `dev-check.html`, and `a11y-check.html`, plus the `?demo` hooks in `js/main.js`, so a public visitor cannot force fake weather. The a11y results stay recorded above; the removed pages are recoverable from commit `a65eefe`. `tests.html` and `scripts/` stay.
+- **2026-10-11 — Checkpoint 8 done: deployed to https://thearkx60.github.io/unit-3-weather/** (GitHub Pages, `master` branch root, HTTPS enforced; Developer approved the cleanup and publishing). Agent verified the Pages build and that every file returns 200 over HTTPS with correct content types. Developer then verified the live app on a laptop and a real phone: location search, device location, date picker, trip overview, About, persistence after reload, `tests.html` passing, and the location-denied path. Note: `a11y-check.html` was deleted at cleanup, so the automated checks were not re-run after the final main-screen CSS change (visually re-checked by the Developer on phone and tablet/laptop sizes); the page and its helper are recoverable from commit `a65eefe` if a re-run is wanted.
 
 ## Saving transcripts
 
