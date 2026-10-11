@@ -66,9 +66,9 @@ During implementation, follow the approved plan in working checkpoints and keep 
 - [x] `variants.js` assigns and persists outfit/reminder variants per date in `localStorage`; reloading or revisiting a date returns the same variants instead of re-rolling, per spec's Persistence rule
 
 **Checkpoint 3 — location**
-- [ ] Manual location entry resolves via Open-Meteo geocoding to coordinates + display name (R1)
-- [ ] Device geolocation path fetches weather for device coordinates and labels it "Your location" (R2)
-- [ ] Most-recent-location persistence in `localStorage`, overwritten on each new selection (R3)
+- [x] Manual location entry resolves via Open-Meteo geocoding to coordinates + display name (R1)
+- [x] Device geolocation path fetches weather for device coordinates and labels it "Your location" (R2)
+- [x] Most-recent-location persistence in `localStorage`, overwritten on each new selection (R3)
 
 **Checkpoint 4 — main screen**
 - [ ] Main screen renders location, date, temperature range, Open-Meteo credit label, character + outfit variant, atmospheric effect overlay when condition ≠ Clear, written recommendation, and reminder badges — all from the one recommendation-state object (R7–R10)
@@ -127,6 +127,7 @@ Record material plan changes and why they were made.
 
 - **2026-10-10 — Checkpoint 1 done (Developer-verified in browser).** Live API check found no heat index field; hydration reminder now uses daily max apparent temperature ≥ 90°F (see `spec.md` Revisions). Asset pack unzipped directly into `assets/` (not a subfolder). `dev-check.html` is a temporary API check page; remove it once `state.js` exists.
 - **2026-10-11 — Checkpoint 2 done (Developer-verified: all checks in `tests.html` pass).** Temperature band uses the average of the day's low and high apparent temperature (see `spec.md` Revisions). `tests.html` is a temporary dev page (about 40 checks); keep it until the app is stable, then remove.
+- **2026-10-11 — Checkpoint 3 done (Developer-verified in browser).** Manual entry shows a list of US matches to choose from (Developer chose this over auto-picking the first match). Location and no-match problems show as inline text for now; the distinct error screens and the denied-permission re-test (browser remembers an earlier Allow, so the Developer must set the site's Location to Block) belong to Checkpoint 6. The clear-saved-location control also arrives with the info screen in Checkpoint 6.
 
 ## Saving transcripts
 

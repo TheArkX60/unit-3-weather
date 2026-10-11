@@ -8,11 +8,24 @@
 </head>
 <body>
   <main id="app">
-    <section id="screen-main" class="screen" hidden><h1>Main screen</h1><p>Placeholder</p></section>
+    <section id="screen-main" class="screen" hidden>
+      <h1>Main screen</h1>
+      <pre id="main-debug">Placeholder</pre>
+    </section>
     <section id="screen-dates" class="screen" hidden><h1>Date picker</h1><p>Placeholder</p></section>
     <section id="screen-trip" class="screen" hidden><h1>Trip overview</h1><p>Placeholder</p></section>
     <section id="screen-info" class="screen" hidden><h1>Info</h1><p>Placeholder</p></section>
-    <section id="screen-location" class="screen" hidden><h1>Location</h1><p>Placeholder</p></section>
+    <section id="screen-location" class="screen" hidden>
+      <h1>Location</h1>
+      <form id="location-form">
+        <label for="location-input">US city or place</label>
+        <input id="location-input" type="text" autocomplete="off" placeholder="Austin, TX">
+        <button type="submit">Search</button>
+      </form>
+      <button type="button" id="use-device">Use my device location</button>
+      <p id="location-status" role="status"></p>
+      <ul id="location-results"></ul>
+    </section>
     <section id="screen-error" class="screen" hidden><h1>Error</h1><p>Placeholder</p></section>
   </main>
   <nav class="dev-nav" aria-label="Placeholder navigation (temporary)">

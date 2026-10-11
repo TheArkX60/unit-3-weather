@@ -11,6 +11,7 @@
 <script type="module">
   import { conditionFor, temperatureBandFor, remindersFor, buildState, dayFromForecast } from './js/state.js';
   import { resolveVariants } from './js/variants.js';
+  import { saveLocation, loadLocation, clearLocation, labelFor, fromMatch } from './js/location.js';
 
   const out = document.getElementById('out');
   let failures = 0;
@@ -24,7 +25,12 @@
   // In-memory stand-in for localStorage so tests never touch real saved data.
   const fakeStorage = () => {
     const m = {};
-    return { getItem: (k) => m[k] ?? null, setItem: (k, v) => { m[k] = v; }, _m: m };
+    return {
+      getItem: (k) => m[k] ?? null,
+      setItem: (k, v) => { m[k] = v; },
+      removeItem: (k) => { delete m[k]; },
+      _m: m,
+    };
   };
   const day = (o = {}) => ({ apparentMax: 75, apparentMin: 65, precipChancePct: 0, snowfallIn: 0, windMaxMph: 5, uvMax: 1, ...o });
 
@@ -110,6 +116,24 @@
     ['Clear', 'Warm', ['sunscreen', 'hydration'], [72, 91]]);
   check('state has every spec key',
     ['location', 'date', 'condition', 'temperatureBand', 'reminders', 'outfitVariant', 'reminderVariants'].every((k) => k in s), true);
+
+  // Location persistence (R3, R4)
+  const locStore = fakeStorage();
+  check('no saved location at start', loadLocation(locStore), null);
+  const a = fromMatch({ name: 'Austin', admin1: 'Texas', latitude: 30.27, longitude: -97.74 });
+  const b = { name: 'Your location', latitude: 40.7, longitude: -74, source: 'device' };
+  check('label includes state', labelFor({ name: 'Austin', admin1: 'Texas' }), 'Austin, Texas');
+  check('label without state', labelFor({ name: 'Nowhere' }), 'Nowhere');
+  saveLocation(a, locStore);
+  check('saved location A loads back', loadLocation(locStore), a);
+  saveLocation(b, locStore);
+  check('saving B overwrites A (only most recent kept)', loadLocation(locStore), b);
+  check('only one storage key used', Object.keys(locStore._m), ['location']);
+  clearLocation(locStore);
+  check('clear removes saved location', loadLocation(locStore), null);
+  check('corrupt saved location -> null', loadLocation({ getItem: () => '{oops' }), null);
+  check('incomplete saved location -> null', loadLocation({ getItem: () => '{"name":"x"}' }), null);
+  check('throwing storage -> null', loadLocation({ getItem() { throw new Error('blocked'); } }), null);
 
   out.insertAdjacentHTML('beforeend', `\n<b>${failures === 0 ? 'ALL TESTS PASSED' : failures + ' FAILED'}</b>\n`);
   document.title = failures === 0 ? 'PASS' : 'FAIL';
