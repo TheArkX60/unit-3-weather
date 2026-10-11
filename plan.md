@@ -62,8 +62,8 @@ During implementation, follow the approved plan in working checkpoints and keep 
 - [x] `weather.js` fetches Open-Meteo geocoding and current + 7-day forecast for a hardcoded location, with fields logged to confirm real API field names/units for apparent temperature, precipitation probability/type, wind speed, UV index, and heat index
 
 **Checkpoint 2 — recommendation state**
-- [ ] `state.js` computes condition (Snowy > Rainy > Windy > Clear), temperature band, and reminders from fetched weather, matching the spec's priority order and thresholds
-- [ ] `variants.js` assigns and persists outfit/reminder variants per date in `localStorage`; reloading or revisiting a date returns the same variants instead of re-rolling, per spec's Persistence rule
+- [x] `state.js` computes condition (Snowy > Rainy > Windy > Clear), temperature band, and reminders from fetched weather, matching the spec's priority order and thresholds
+- [x] `variants.js` assigns and persists outfit/reminder variants per date in `localStorage`; reloading or revisiting a date returns the same variants instead of re-rolling, per spec's Persistence rule
 
 **Checkpoint 3 — location**
 - [ ] Manual location entry resolves via Open-Meteo geocoding to coordinates + display name (R1)
@@ -126,6 +126,7 @@ Before testing, record the purpose, a few realistic tasks, non-leading prompts, 
 Record material plan changes and why they were made.
 
 - **2026-10-10 — Checkpoint 1 done (Developer-verified in browser).** Live API check found no heat index field; hydration reminder now uses daily max apparent temperature ≥ 90°F (see `spec.md` Revisions). Asset pack unzipped directly into `assets/` (not a subfolder). `dev-check.html` is a temporary API check page; remove it once `state.js` exists.
+- **2026-10-11 — Checkpoint 2 done (Developer-verified: all checks in `tests.html` pass).** Temperature band uses the average of the day's low and high apparent temperature (see `spec.md` Revisions). `tests.html` is a temporary dev page (about 40 checks); keep it until the app is stable, then remove.
 
 ## Saving transcripts
 

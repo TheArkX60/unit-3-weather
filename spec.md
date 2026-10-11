@@ -123,7 +123,7 @@ Define the weather inputs, recommendation categories, coded rules, and shared st
 3. **Windy** — sustained wind ≥ 20 mph.
 4. **Clear** — none of the above.
 
-**Temperature band** (one of five, by apparent temperature): Hot (≥ 85°F), Warm (70–84°F), Mild (55–69°F), Cool (40–54°F), Cold (< 40°F).
+**Temperature band** (one of five, by the average of the day's low and high apparent temperature): Hot (≥ 85°F), Warm (70–84°F), Mild (55–69°F), Cool (40–54°F), Cold (< 40°F).
 
 **Reminders** (independent booleans, any number can be active at once): Umbrella (precipitation probability ≥ 30%), Sunscreen (UV index ≥ 3), Extra hydration (daily maximum apparent temperature ≥ 90°F).
 
@@ -184,6 +184,7 @@ Record features intentionally excluded from this project.
 After implementation or testing, record requirement changes and the evidence that prompted them. Update the screen drawings when a material layout or interaction changes.
 
 - **2026-10-10 — Heat index replaced by apparent temperature.** A live Open-Meteo forecast response (Austin, TX) contains no heat index field. The Extra hydration reminder now triggers on daily maximum apparent temperature ≥ 90°F, which already incorporates humidity. Developer chose this over computing the NWS heat index (Checkpoint 1).
+- **2026-10-11 — Temperature band input defined.** The spec said "apparent temperature" without naming the daily value. The band now uses the average of the day's low and high apparent temperature, since most people are out during the middle of the day. Developer approved (Checkpoint 2).
 
 ## Approval
 

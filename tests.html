@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Checkpoint 2 tests (temporary dev page)</title>
+<style>body{font-family:monospace}.pass{color:green}.fail{color:red}</style>
+</head>
+<body>
+<h1>Checkpoint 2 tests</h1>
+<pre id="out"></pre>
+<script type="module">
+  import { conditionFor, temperatureBandFor, remindersFor, buildState, dayFromForecast } from './js/state.js';
+  import { resolveVariants } from './js/variants.js';
+
+  const out = document.getElementById('out');
+  let failures = 0;
+  const check = (name, actual, expected) => {
+    const ok = JSON.stringify(actual) === JSON.stringify(expected);
+    if (!ok) failures++;
+    out.insertAdjacentHTML('beforeend',
+      `<span class="${ok ? 'pass' : 'fail'}">${ok ? 'PASS' : 'FAIL'}</span> ${name}` +
+      (ok ? '' : ` — got ${JSON.stringify(actual)}, expected ${JSON.stringify(expected)}`) + '\n');
+  };
+  // In-memory stand-in for localStorage so tests never touch real saved data.
+  const fakeStorage = () => {
+    const m = {};
+    return { getItem: (k) => m[k] ?? null, setItem: (k, v) => { m[k] = v; }, _m: m };
+  };
+  const day = (o = {}) => ({ apparentMax: 75, apparentMin: 65, precipChancePct: 0, snowfallIn: 0, windMaxMph: 5, uvMax: 1, ...o });
+
+  // Condition priority: Snowy > Rainy > Windy > Clear
+  check('clear day', conditionFor(day()), 'Clear');
+  check('windy at 20 mph', conditionFor(day({ windMaxMph: 20 })), 'Windy');
+  check('not windy at 19.9', conditionFor(day({ windMaxMph: 19.9 })), 'Clear');
+  check('rainy at 30%', conditionFor(day({ precipChancePct: 30 })), 'Rainy');
+  check('not rainy at 29%', conditionFor(day({ precipChancePct: 29 })), 'Clear');
+  check('rain beats wind', conditionFor(day({ precipChancePct: 50, windMaxMph: 30 })), 'Rainy');
+  check('snow beats rain+wind', conditionFor(day({ snowfallIn: 0.1, precipChancePct: 90, windMaxMph: 30 })), 'Snowy');
+
+  // Temperature bands (midpoint of min/max apparent temperature)
+  const band = (min, max) => temperatureBandFor(day({ apparentMin: min, apparentMax: max }));
+  check('Hot at 85', band(85, 85), 'Hot');
+  check('Warm at 84', band(84, 84), 'Warm');
+  check('Warm at 70', band(70, 70), 'Warm');
+  check('Mild at 69', band(69, 69), 'Mild');
+  check('Mild at 55', band(55, 55), 'Mild');
+  check('Cool at 54', band(54, 54), 'Cool');
+  check('Cool at 40', band(40, 40), 'Cool');
+  check('Cold at 39', band(39, 39), 'Cold');
+  check('midpoint used (60-94 -> 77 Warm)', band(60, 94), 'Warm');
+
+  // Reminders are independent
+  check('no reminders', remindersFor(day()), []);
+  check('umbrella at 30%', remindersFor(day({ precipChancePct: 30 })), ['umbrella']);
+  check('sunscreen at UV 3', remindersFor(day({ uvMax: 3 })), ['sunscreen']);
+  check('no sunscreen at UV 2.9', remindersFor(day({ uvMax: 2.9 })), []);
+  check('hydration at apparent max 90', remindersFor(day({ apparentMax: 90 })), ['hydration']);
+  check('all three at once', remindersFor(day({ precipChancePct: 40, uvMax: 8, apparentMax: 95 })), ['umbrella', 'sunscreen', 'hydration']);
+
+  // Variants: range, persistence, independence
+  const store = fakeStorage();
+  const first = resolveVariants('2026-10-11', ['umbrella', 'hydration'], store);
+  check('outfit variant in 1-3', [1, 2, 3].includes(first.outfitVariant), true);
+  check('reminder variants in 1-3', Object.values(first.reminderVariants).every((v) => [1, 2, 3].includes(v)), true);
+  check('only active reminders get variants', Object.keys(first.reminderVariants), ['umbrella', 'hydration']);
+  check('stored under date key', Object.keys(store._m), ['variants:2026-10-11']);
+  let stable = true;
+  for (let i = 0; i < 50; i++) {
+    const again = resolveVariants('2026-10-11', ['umbrella', 'hydration'], store);
+    if (JSON.stringify(again) !== JSON.stringify(first)) stable = false;
+  }
+  check('revisiting a date returns the same variants (50 reads)', stable, true);
+  const later = resolveVariants('2026-10-11', ['umbrella', 'hydration', 'sunscreen'], store);
+  check('newly active reminder keeps earlier variants',
+    [later.outfitVariant, later.reminderVariants.umbrella, later.reminderVariants.hydration],
+    [first.outfitVariant, first.reminderVariants.umbrella, first.reminderVariants.hydration]);
+
+  // Independence: across many fresh dates, outfit and wording must not be locked as fixed pairs
+  const pairs = new Set();
+  const seenOutfit = new Set();
+  const seenWording = new Set();
+  for (let i = 0; i < 300; i++) {
+    const v = resolveVariants('d' + i, ['umbrella'], fakeStorage());
+    pairs.add(v.outfitVariant + '-' + v.reminderVariants.umbrella);
+    seenOutfit.add(v.outfitVariant);
+    seenWording.add(v.reminderVariants.umbrella);
+  }
+  check('all 3 outfit variants occur', seenOutfit.size, 3);
+  check('all 3 wordings occur', seenWording.size, 3);
+  check('all 9 outfit x wording pairs occur (independent)', pairs.size, 9);
+
+  // Resilience: broken storage must not crash
+  const broken = { getItem() { throw new Error('blocked'); }, setItem() { throw new Error('blocked'); } };
+  check('works when storage throws', [1, 2, 3].includes(resolveVariants('x', [], broken).outfitVariant), true);
+  const corrupt = { getItem: () => '{not json', setItem() {} };
+  check('works on corrupt stored JSON', [1, 2, 3].includes(resolveVariants('x', [], corrupt).outfitVariant), true);
+
+  // Full state object, using Checkpoint 1's live-shaped daily data
+  const daily = {
+    time: ['2026-10-10', '2026-10-11'],
+    apparent_temperature_max: [93.9, 91.1], apparent_temperature_min: [59.5, 71.7],
+    precipitation_probability_max: [0, 1], snowfall_sum: [0, 0],
+    wind_speed_10m_max: [7.7, 12.8], uv_index_max: [6.35, 6.2],
+  };
+  check('dayFromForecast finds date', dayFromForecast(daily, '2026-10-11').apparentMax, 91.1);
+  check('dayFromForecast null out of range', dayFromForecast(daily, '2026-12-01'), null);
+  const s = buildState({ location: 'Austin, TX', date: '2026-10-11', day: dayFromForecast(daily, '2026-10-11') }, fakeStorage());
+  check('state: condition/band/reminders/range',
+    [s.condition, s.temperatureBand, s.reminders, s.temperatureRangeF],
+    ['Clear', 'Warm', ['sunscreen', 'hydration'], [72, 91]]);
+  check('state has every spec key',
+    ['location', 'date', 'condition', 'temperatureBand', 'reminders', 'outfitVariant', 'reminderVariants'].every((k) => k in s), true);
+
+  out.insertAdjacentHTML('beforeend', `\n<b>${failures === 0 ? 'ALL TESTS PASSED' : failures + ' FAILED'}</b>\n`);
+  document.title = failures === 0 ? 'PASS' : 'FAIL';
+</script>
+</body>
+</html>
