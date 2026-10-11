@@ -6,7 +6,8 @@
 <style>body{font-family:monospace}.pass{color:green}.fail{color:red}</style>
 </head>
 <body>
-<h1>Checkpoint 2 tests</h1>
+<h1>App tests (all checkpoints)</h1>
+<h2 id="summary">Running…</h2>
 <pre id="out"></pre>
 <script type="module">
   import { conditionFor, temperatureBandFor, remindersFor, buildState, dayFromForecast } from './js/state.js';
@@ -18,6 +19,9 @@
 
   const out = document.getElementById('out');
   let failures = 0;
+  const section = (title) => out.insertAdjacentHTML('beforeend', `
+<b>== ${title} ==</b>
+`);
   const check = (name, actual, expected) => {
     const ok = JSON.stringify(actual) === JSON.stringify(expected);
     if (!ok) failures++;
@@ -37,6 +41,7 @@
   };
   const day = (o = {}) => ({ apparentMax: 75, apparentMin: 65, precipChancePct: 0, snowfallIn: 0, windMaxMph: 5, uvMax: 1, ...o });
 
+  section('Recommendation state: condition (Checkpoint 2)');
   // Condition priority: Snowy > Rainy > Windy > Clear
   check('clear day', conditionFor(day()), 'Clear');
   check('windy at 20 mph', conditionFor(day({ windMaxMph: 20 })), 'Windy');
@@ -46,6 +51,7 @@
   check('rain beats wind', conditionFor(day({ precipChancePct: 50, windMaxMph: 30 })), 'Rainy');
   check('snow beats rain+wind', conditionFor(day({ snowfallIn: 0.1, precipChancePct: 90, windMaxMph: 30 })), 'Snowy');
 
+  section('Recommendation state: temperature bands (Checkpoint 2)');
   // Temperature bands (midpoint of min/max apparent temperature)
   const band = (min, max) => temperatureBandFor(day({ apparentMin: min, apparentMax: max }));
   check('Hot at 85', band(85, 85), 'Hot');
@@ -58,6 +64,7 @@
   check('Cold at 39', band(39, 39), 'Cold');
   check('midpoint used (60-94 -> 77 Warm)', band(60, 94), 'Warm');
 
+  section('Recommendation state: reminders (Checkpoint 2, sunscreen rule Checkpoint 4)');
   // Reminders are independent
   check('no reminders', remindersFor(day()), []);
   check('umbrella at 30%', remindersFor(day({ precipChancePct: 30 })), ['umbrella']);
@@ -68,6 +75,7 @@
   check('hydration at apparent max 90', remindersFor(day({ apparentMax: 90 })), ['hydration']);
   check('all three at once', remindersFor(day({ precipChancePct: 40, uvMax: 8, apparentMax: 95 })), ['umbrella', 'sunscreen', 'hydration']);
 
+  section('Outfit and wording variants (Checkpoint 2)');
   // Variants: range, persistence, independence
   const store = fakeStorage();
   const first = resolveVariants('2026-10-11', ['umbrella', 'hydration'], store);
@@ -122,6 +130,7 @@
   check('state has every spec key',
     ['location', 'date', 'condition', 'temperatureBand', 'reminders', 'outfitVariant', 'reminderVariants'].every((k) => k in s), true);
 
+  section('Saved location (Checkpoint 3)');
   // Location persistence (R3, R4)
   const locStore = fakeStorage();
   check('no saved location at start', loadLocation(locStore), null);
@@ -140,6 +149,7 @@
   check('incomplete saved location -> null', loadLocation({ getItem: () => '{"name":"x"}' }), null);
   check('throwing storage -> null', loadLocation({ getItem() { throw new Error('blocked'); } }), null);
 
+  section('Written wording (Checkpoint 4)');
   // Wording (js/text.js)
   const st = (o) => ({ temperatureBand: 'Mild', condition: 'Clear', ...o });
   check('Clear: band line only', recommendationText(st({})), "It's mild. A tee and pants are fine.");
@@ -154,6 +164,7 @@
   check('dateLabel forecast day', dateLabel('2026-10-13', '2026-10-11'), 'Tue, Oct 13');
   check('temperature range text', temperatureRangeText([72, 91]), '72–91°F');
 
+  section('Date picker and trip overview (Checkpoint 5)');
   // Trip selection (js/selection.js) and list summaries
   check('toggle adds a day', toggleDate([], '2026-10-12'), ['2026-10-12']);
   check('toggle keeps date order', toggleDate(['2026-10-14'], '2026-10-12'), ['2026-10-12', '2026-10-14']);
@@ -172,6 +183,9 @@
   check('summaryFor writes nothing to localStorage', Object.keys(JSON.parse(JSON.stringify(localStorage))), before);
 
   out.insertAdjacentHTML('beforeend', `\n<b>${failures === 0 ? 'ALL TESTS PASSED' : failures + ' FAILED'}</b>\n`);
+  const summary = document.getElementById('summary');
+  summary.textContent = failures === 0 ? 'ALL TESTS PASSED' : `${failures} FAILED`;
+  summary.className = failures === 0 ? 'pass' : 'fail';
   document.title = failures === 0 ? 'PASS' : 'FAIL';
 </script>
 </body>
