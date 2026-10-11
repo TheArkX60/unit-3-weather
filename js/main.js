@@ -7,19 +7,34 @@ import { initLocationScreen } from './screens/location.js';
 import { initDatesScreen, renderDates } from './screens/dates.js';
 import { renderTrip } from './screens/trip.js';
 import { tripDatesFromHash } from './selection.js';
-import { renderMain, showMainLoading, showMainError } from './screens/main.js';
+import { renderMain, showMainLoading } from './screens/main.js';
+import { initInfoScreen, resetInfoScreen } from './screens/info.js';
+import { initErrorScreen, renderError } from './screens/error.js';
 
 const SCREENS = ['main', 'dates', 'trip', 'info', 'location', 'error'];
 
 // Last forecast fetched, reused when switching dates for the same location.
 let cachedForecast = null;
+// Where "Try again" on the weather-unavailable screen should go back to.
+let retryHash = '#main';
 
 async function forecastFor(saved) {
+  // TEMPORARY dev preview (see js/demo.js): ?demo=unavailable simulates a failed forecast request.
+  if (new URLSearchParams(location.search).get('demo')?.split(',').includes('unavailable')) {
+    throw new Error('demo: weather unavailable');
+  }
   const key = `${saved.latitude},${saved.longitude}`;
   if (cachedForecast?.key !== key) {
     cachedForecast = { key, data: await fetchForecast(saved.latitude, saved.longitude) };
   }
   return cachedForecast.data;
+}
+
+/** Show an error screen without adding the failed screen to history (Back would just fail again). */
+function showError(kind, detail = '', from = '#main') {
+  retryHash = from;
+  history.replaceState(null, '', `#error/${kind}/${encodeURIComponent(detail)}`);
+  route();
 }
 
 function route() {
@@ -33,6 +48,11 @@ function route() {
     document.getElementById(`screen-${id}`).hidden = id !== screen;
   }
   if (screen === 'main') showMain(arg);
+  if (screen === 'info') resetInfoScreen();
+  if (screen === 'location') {
+    document.getElementById('location-back').hidden = !loadLocation(); // nothing to go back to on first visit
+  }
+  if (screen === 'error') renderError(arg ?? 'unavailable', decodeURIComponent(location.hash.split('/')[2] ?? ''));
   if (screen === 'dates') showListScreen('dates', (data) => renderDates(data));
   if (screen === 'trip') {
     showListScreen('trip', (data) => renderTrip(data, tripDatesFromHash(arg, data.daily.time)));
@@ -41,6 +61,7 @@ function route() {
 
 async function showMain(requestedDate) {
   const saved = loadLocation();
+  const startHash = location.hash;
   showMainLoading();
   try {
     const data = await forecastFor(saved);
@@ -53,22 +74,22 @@ async function showMain(requestedDate) {
     const state = buildState({ location: saved.name, date, day });
     renderMain(state, today);
   } catch {
-    showMainError('Weather is unavailable right now.');
+    if (location.hash === startHash) showError('unavailable', '', startHash); // ignore if the user already moved on
   }
 }
 
 // Date picker and trip overview share one load/error pattern around the cached forecast.
 async function showListScreen(screen, render) {
   const saved = loadLocation();
+  const startHash = location.hash;
   const byId = (suffix) => document.getElementById(`${screen}-${suffix}`);
   byId('loading').hidden = false;
-  byId('error').hidden = true;
   byId('content').hidden = true;
   try {
     render(await forecastFor(saved));
     byId('content').hidden = false;
   } catch {
-    byId('error').hidden = false;
+    if (location.hash === startHash) showError('unavailable', '', startHash);
   } finally {
     byId('loading').hidden = true;
   }
@@ -79,7 +100,14 @@ function selectLocation(chosen) {
   location.hash = '#main';
 }
 
-initLocationScreen({ onSelect: selectLocation });
+initLocationScreen({ onSelect: selectLocation, onError: (kind, detail) => showError(kind, detail) });
+initInfoScreen();
+initErrorScreen({
+  onRetry: () => {
+    cachedForecast = null;
+    location.hash = retryHash;
+  },
+});
 initDatesScreen({
   openDay: (date) => { location.hash = `#main/${date}`; },
   openTrip: (dates) => { location.hash = `#trip/${dates.join(',')}`; },

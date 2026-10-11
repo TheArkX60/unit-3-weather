@@ -1,10 +1,14 @@
 // Location entry screen: type a US place, pick from the matches, or use the device location.
-// Checkpoint 3 shows problems as inline status text; distinct error states arrive in Checkpoint 6.
+// Distinct problems (no match, permission denied) are reported through `onError` to the error screen.
 import { geocode } from '../weather.js';
 import { fromMatch, labelFor, requestDeviceLocation } from '../location.js';
 
-/** Wire up the location screen. `onSelect(location)` is called with the chosen location. */
-export function initLocationScreen({ onSelect }) {
+/**
+ * Wire up the location screen.
+ * `onSelect(location)` receives the chosen location; `onError(kind, detail)` receives
+ * 'not-found' (with the searched text) or 'denied'.
+ */
+export function initLocationScreen({ onSelect, onError }) {
   const form = document.getElementById('location-form');
   const input = document.getElementById('location-input');
   const results = document.getElementById('location-results');
@@ -22,7 +26,8 @@ export function initLocationScreen({ onSelect }) {
     try {
       const matches = await geocode(query);
       if (matches.length === 0) {
-        setStatus(`No US location found for "${query}".`);
+        setStatus('');
+        onError('not-found', query);
         return;
       }
       setStatus(`${matches.length} match${matches.length === 1 ? '' : 'es'}. Choose one:`);
@@ -30,6 +35,7 @@ export function initLocationScreen({ onSelect }) {
         const item = document.createElement('li');
         const button = document.createElement('button');
         button.type = 'button';
+        button.className = 'btn btn--block';
         button.textContent = labelFor(match);
         button.addEventListener('click', () => onSelect(fromMatch(match)));
         item.append(button);
@@ -46,9 +52,12 @@ export function initLocationScreen({ onSelect }) {
     try {
       onSelect(await requestDeviceLocation());
     } catch (err) {
-      setStatus(err.code === 'denied'
-        ? 'Location access was denied. Type a location instead.'
-        : 'Could not get your device location. Type a location instead.');
+      if (err.code === 'denied') {
+        setStatus('');
+        onError('denied');
+      } else {
+        setStatus('Could not get your device location. Type a location instead.');
+      }
     }
   });
 }

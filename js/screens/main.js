@@ -11,17 +11,6 @@ export function showMainLoading() {
   $('screen-main').dataset.condition = 'loading';
   $('main-loading').hidden = false;
   $('main-content').hidden = true;
-  $('main-error').hidden = true;
-  $('main-effect').className = 'effect';
-}
-
-/** Show a plain message instead of the character (Checkpoint 6 replaces this with the drawn error states). */
-export function showMainError(message) {
-  $('screen-main').dataset.condition = 'loading';
-  $('main-loading').hidden = true;
-  $('main-content').hidden = true;
-  $('main-error').hidden = false;
-  $('main-error-text').textContent = message;
   $('main-effect').className = 'effect';
 }
 
@@ -29,7 +18,6 @@ export function showMainError(message) {
 export function renderMain(state, today) {
   $('screen-main').dataset.condition = state.condition.toLowerCase();
   $('main-loading').hidden = true;
-  $('main-error').hidden = true;
   $('main-content').hidden = false;
 
   $('main-date').textContent = dateLabel(state.date, today);

@@ -13,9 +13,6 @@
       <div id="main-loading" class="main__loading">
         <div class="spinner" role="status"><span class="visually-hidden">Loading weather</span></div>
       </div>
-      <p id="main-error" class="main__error" role="alert" hidden>
-        <span id="main-error-text"></span> <a href="#location">Change location</a>
-      </p>
       <div id="main-content" class="main__content" hidden>
         <div class="main__summary">
           <p class="main__condition">
@@ -38,6 +35,7 @@
       </div>
       <div id="main-effect" class="effect" aria-hidden="true"></div>
     </section>
+
     <section id="screen-dates" class="screen list-screen" hidden>
       <header class="list-screen__header">
         <a class="list-screen__back" href="#main">&larr; Back</a>
@@ -46,18 +44,18 @@
       <div id="dates-loading" class="list-screen__loading">
         <div class="spinner" role="status"><span class="visually-hidden">Loading weather</span></div>
       </div>
-      <p id="dates-error" class="list-screen__error" role="alert" hidden>Weather is unavailable right now.</p>
       <div id="dates-content" hidden>
         <p id="dates-hint" class="list-screen__hint"></p>
         <p id="dates-status" class="visually-hidden" role="status"></p>
         <ol id="dates-list" class="day-list"></ol>
         <div class="list-screen__actions">
-          <button type="button" id="dates-plan">Plan a trip</button>
-          <button type="button" id="dates-cancel" hidden>Cancel</button>
-          <button type="button" id="dates-ok" hidden disabled>OK</button>
+          <button type="button" class="btn" id="dates-plan">Plan a trip</button>
+          <button type="button" class="btn" id="dates-cancel" hidden>Cancel</button>
+          <button type="button" class="btn btn--primary" id="dates-ok" hidden disabled>OK</button>
         </div>
       </div>
     </section>
+
     <section id="screen-trip" class="screen list-screen" hidden>
       <header class="list-screen__header">
         <a class="list-screen__back" href="#dates">&larr; Back</a>
@@ -66,30 +64,89 @@
       <div id="trip-loading" class="list-screen__loading">
         <div class="spinner" role="status"><span class="visually-hidden">Loading weather</span></div>
       </div>
-      <p id="trip-error" class="list-screen__error" role="alert" hidden>Weather is unavailable right now.</p>
       <div id="trip-content" hidden>
         <p id="trip-empty" class="list-screen__hint" hidden>No days selected. Go back and pick some.</p>
         <ol id="trip-list" class="day-list"></ol>
       </div>
     </section>
-    <section id="screen-info" class="screen" hidden><h1>Info</h1><p>Placeholder</p></section>
-    <section id="screen-location" class="screen" hidden>
-      <h1>Location</h1>
-      <form id="location-form">
-        <label for="location-input">US city or place</label>
-        <input id="location-input" type="text" autocomplete="off" placeholder="Austin, TX">
-        <button type="submit">Search</button>
-      </form>
-      <button type="button" id="use-device">Use my device location</button>
-      <p id="location-status" role="status"></p>
-      <ul id="location-results"></ul>
+
+    <section id="screen-info" class="screen list-screen" hidden>
+      <header class="list-screen__header">
+        <a class="list-screen__back" href="#main">&larr; Back</a>
+        <h1>About</h1>
+      </header>
+
+      <h2>Creator</h2>
+      <p>Created by Noah Rutledge as a prototype for a clothing brand's social-engagement campaign aimed at US college students.</p>
+
+      <h2>Weather data</h2>
+      <p>Weather comes from <a href="https://open-meteo.com/">Open-Meteo</a>. For US locations its forecasts are based on NOAA's Global Forecast System (GFS) model. The app shows today and the next 7 days, with "feels like" temperatures in &deg;F and wind in mph.</p>
+
+      <h2>Recommendation rules</h2>
+      <p>One recommendation drives the character, icons, text and reminders. Each day gets:</p>
+      <ul>
+        <li><strong>A condition</strong>, first match wins: Snowy (any snowfall), Rainy (30% or higher chance of precipitation), Windy (wind of 20 mph or more), otherwise Clear.</li>
+        <li><strong>A temperature band</strong> from the average of the day's low and high "feels like" temperature: Hot (85&deg;F or above), Warm (70&ndash;84), Mild (55&ndash;69), Cool (40&ndash;54), Cold (below 40).</li>
+        <li><strong>Reminders</strong>, each independent: Umbrella (30% or higher chance of precipitation), Sunscreen (UV index 3 or higher, hidden when precipitation chance is 60% or higher), and Extra hydration (a "feels like" high of 90&deg;F or above).</li>
+      </ul>
+      <p>Basis: a UV index of 3 is "Moderate" on the US EPA/NWS UV index scale. The hydration threshold sits near the start of the "Extreme Caution" level on the <a href="https://www.weather.gov/ama/heatindex">NWS heat index chart</a>; Open-Meteo has no heat index, so its "feels like" temperature stands in for it. Dressing in layers follows <a href="https://www.rei.com/learn/expert-advice/best-base-layers.html">REI's layering basics</a>. The temperature bands and the 30% rain threshold are judgment calls, not published standards, so treat the advice as a suggestion.</p>
+
+      <h2>Privacy</h2>
+      <ul>
+        <li>No accounts, no analytics, and no server of our own. This is a static site.</li>
+        <li>Your most recent location is saved in this browser only. So are the random outfit and wording choices for each date, which keep a day looking the same when you come back. Nothing else is stored.</li>
+        <li>Your device location is requested only when you press "Use my device location." Its coordinates go to Open-Meteo to fetch the forecast, and are not saved as a place name.</li>
+        <li>Open-Meteo is the one outside party that receives data: it logs your IP address and the coordinates you request for up to 90 days for technical and anti-abuse purposes, and does not share them with third parties. See the <a href="https://open-meteo.com/en/terms">Open-Meteo terms and privacy</a>.</li>
+      </ul>
+      <button type="button" class="btn" id="clear-location">Clear saved location</button>
+      <p id="clear-status" role="status"></p>
+
+      <h2>Art credits</h2>
+      <ul>
+        <li>Character and outfits: "Character Creation Asset Pack" by <a href="https://nonemo.itch.io/character-creation-asset-pack">nonemo</a>, CC0 (public domain). Outfits were assembled from its pieces.</li>
+        <li>Icons: <a href="https://github.com/google/material-design-icons">Material Symbols</a> by Google, Apache License 2.0.</li>
+        <li>Rain, snow and wind effects and the loading spinner were made for this project.</li>
+      </ul>
     </section>
-    <section id="screen-error" class="screen" hidden><h1>Error</h1><p>Placeholder</p></section>
+
+    <section id="screen-location" class="screen list-screen" hidden>
+      <header class="list-screen__header">
+        <a id="location-back" class="list-screen__back" href="#main">&larr; Back</a>
+        <h1>Location</h1>
+      </header>
+      <form id="location-form" class="location-form">
+        <label for="location-input">US city or place</label>
+        <div class="location-form__row">
+          <input id="location-input" type="text" autocomplete="off" placeholder="Austin, TX">
+          <button type="submit" class="btn btn--primary">Search</button>
+        </div>
+      </form>
+      <button type="button" class="btn" id="use-device">Use my device location</button>
+      <p id="location-status" role="status"></p>
+      <ul id="location-results" class="day-list"></ul>
+    </section>
+
+    <section id="screen-error" class="screen list-screen" hidden>
+      <div data-error="not-found" hidden>
+        <h1 tabindex="-1">Character not found</h1>
+        <p>We couldn't find a US location matching <strong id="error-query"></strong>. Check the spelling or try a nearby city.</p>
+        <a class="btn btn--primary" href="#location">Try another location</a>
+      </div>
+      <div data-error="denied" hidden>
+        <h1 tabindex="-1">Location access denied</h1>
+        <p>Your browser didn't let this app use your device location. You can type a location instead, or allow location access for this site in your browser settings and try again.</p>
+        <a class="btn btn--primary" href="#location">Enter a location</a>
+      </div>
+      <div data-error="unavailable" hidden>
+        <h1 tabindex="-1">Weather unavailable</h1>
+        <p>We couldn't get the forecast right now. Check your connection and try again.</p>
+        <div class="list-screen__actions list-screen__actions--inline">
+          <button type="button" class="btn btn--primary" id="error-retry">Try again</button>
+          <a class="btn" href="#location">Change location</a>
+        </div>
+      </div>
+    </section>
   </main>
-  <nav class="dev-nav" aria-label="Placeholder navigation (temporary)">
-    <a href="#main">Main</a> <a href="#dates">Dates</a> <a href="#trip">Trip</a>
-    <a href="#info">Info</a> <a href="#location">Location</a> <a href="#error">Error</a>
-  </nav>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>

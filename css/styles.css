@@ -4,8 +4,6 @@ body { margin: 0; font-family: system-ui, sans-serif; }
 [hidden] { display: none !important; }
 .screen { padding: 1rem; }
 .screen[hidden] { display: none; }
-.dev-nav { padding: 1rem; }
-.dev-nav a { display: inline-block; min-width: 24px; min-height: 24px; margin-right: .5rem; }
 
 /* ---- Icons: Material Symbols drawn as masks so they take the surrounding text color ---- */
 .icon {
@@ -104,8 +102,7 @@ body { margin: 0; font-family: system-ui, sans-serif; }
 .main[data-condition='loading'] { --bg: #3a6786; }
 
 .main__loading { min-height: 100dvh; display: grid; place-items: center; }
-.main__error { margin: 0; padding: 2rem 1rem; font-size: 1.25rem; }
-.main__error a, .main__bar a { color: inherit; }
+.main__bar a { color: inherit; }
 
 /* Phone: summary on top, character fills the lower area, controls anchored at the bottom for the thumb. */
 /* Phone: exactly one screen tall, so the bottom bar is always visible; the character row shrinks to fit. */
@@ -161,10 +158,10 @@ body { margin: 0; font-family: system-ui, sans-serif; }
 /* Text and controls sit above the weather effect so it never hides them; the shadow keeps
    white text readable where an effect line passes behind it. */
 .effect { z-index: 1; }
-.main__summary, .main__bar, .main__error { position: relative; z-index: 2; }
+.main__summary, .main__bar { position: relative; z-index: 2; }
 /* Dark scrim behind text and buttons. At 55% black, white text stays above 4.5:1 even where a white
    effect line passes directly behind a word (worst case 5.3:1 across all four backgrounds and effects). */
-.main__summary, .main__error {
+.main__summary {
   background: rgba(0, 0, 0, 0.55);
   border-radius: 16px;
   padding: 1rem 1.25rem;
@@ -193,7 +190,6 @@ body:has(.list-screen:not([hidden])) { background: #24323f; }
 .list-screen__back { color: inherit; display: inline-flex; align-items: center; min-height: 48px; min-width: 48px; font-weight: 600; }
 .list-screen__hint { font-size: 1.05rem; }
 .list-screen__loading { display: grid; place-items: center; min-height: 40dvh; }
-.list-screen__error { font-size: 1.25rem; }
 
 .day-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
 .day-row {
@@ -230,7 +226,7 @@ body:has(.list-screen:not([hidden])) { background: #24323f; }
 .day-row__check { grid-column: 1 / -1; font-weight: 700; }
 /* Selected = thick white border plus a visible "Selected" label, so it never relies on color alone. */
 .day-row.is-selected { border-color: #fff; }
-.day-row:focus-visible, .list-screen__actions button:focus-visible, .list-screen__back:focus-visible {
+.day-row:focus-visible, .btn:focus-visible, .list-screen__back:focus-visible, .list-screen a:focus-visible, .location-form input:focus-visible {
   outline: 3px solid #fff;
   outline-offset: 2px;
 }
@@ -247,9 +243,13 @@ body:has(.list-screen:not([hidden])) { background: #24323f; }
   padding: 1rem 0;
   background: linear-gradient(transparent, #24323f 35%);
 }
-.list-screen__actions button {
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 48px;
   min-width: 96px;
+  box-sizing: border-box;
   padding: 0 1.25rem;
   border: 2px solid #fff;
   border-radius: 999px;
@@ -257,10 +257,12 @@ body:has(.list-screen:not([hidden])) { background: #24323f; }
   color: #fff;
   font: inherit;
   font-weight: 700;
+  text-decoration: none;
   cursor: pointer;
 }
-.list-screen__actions #dates-ok { background: #fff; color: #1d1d1d; }
-.list-screen__actions button:disabled { opacity: .55; cursor: not-allowed; }
+.btn--primary { background: #fff; color: #1d1d1d; }
+.btn--block { width: 100%; justify-content: flex-start; border-radius: 16px; padding: 0 1rem; }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
 
 @media (min-width: 900px) {
   .list-screen { padding: 2rem; }
@@ -286,3 +288,31 @@ body:has(.list-screen:not([hidden])) { background: #24323f; }
 /* List content fills the space between header and bottom actions. */
 .list-screen > div[id$='-content'] { flex: 1; display: flex; flex-direction: column; }
 .list-screen__actions { margin-top: auto; }
+
+/* ---- Info, location, and error screens (text screens in the list-screen style) ---- */
+.list-screen h2 { font-size: 1.2rem; margin: 1.75rem 0 .25rem; }
+.list-screen p, .list-screen li { line-height: 1.5; }
+.list-screen a { color: #fff; }
+.list-screen a.btn--primary { color: #1d1d1d; }
+.list-screen ul:not(.day-list) { padding-left: 1.25rem; }
+.list-screen ul:not(.day-list) li { margin: .4rem 0; }
+.list-screen > .btn, .list-screen > div > .btn, .list-screen__actions--inline .btn { margin-top: .75rem; }
+.list-screen__actions--inline { position: static; justify-content: flex-start; padding: 0; background: none; margin-top: 0; }
+
+.location-form { margin: 1.25rem 0 1rem; }
+.location-form label { display: block; font-weight: 600; margin-bottom: .4rem; }
+.location-form__row { display: flex; gap: .5rem; }
+.location-form input {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  box-sizing: border-box;
+  padding: 0 1rem;
+  border: 2px solid #fff;
+  border-radius: 12px;
+  background: #fff;
+  color: #1d1d1d;
+  font: inherit; /* 16px+ keeps iOS from zooming into the field */
+}
+#location-status { min-height: 1.5rem; }
+#location-results { margin-top: .5rem; }
