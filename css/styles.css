@@ -105,9 +105,11 @@ body { margin: 0; font-family: system-ui, sans-serif; }
 .main__bar a { color: inherit; }
 
 /* Phone: summary on top, character fills the lower area, controls anchored at the bottom for the thumb. */
-/* Phone: exactly one screen tall, so the bottom bar is always visible; the character row shrinks to fit. */
+/* Phone: at least one screen tall. The character is sized from the viewport height so the bottom bar normally
+   fits without scrolling; on a short window the page scrolls instead of clipping, and the colored
+   background always grows with the content. */
 .main__content {
-  height: 100dvh;
+  min-height: 100dvh;
   display: grid;
   grid-template-rows: auto 1fr auto;
   padding: 1rem;
@@ -125,8 +127,8 @@ body { margin: 0; font-family: system-ui, sans-serif; }
   min-height: 44px; padding: 0 .9rem;
   background: #fff; color: #1d1d1d; border-radius: 999px; font-weight: 600;
 }
-.main__character { display: flex; align-items: flex-end; justify-content: center; min-height: 0; overflow: hidden; }
-.main__character img { height: 100%; max-height: 440px; max-width: 100%; width: auto; }
+.main__character { display: flex; align-items: flex-end; justify-content: center; min-height: 0; }
+.main__character img { height: clamp(140px, 34dvh, 440px); max-width: 100%; width: auto; }
 .main__bar { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
 .main__bar a {
   display: inline-flex; align-items: center; justify-content: center;
@@ -138,8 +140,6 @@ body { margin: 0; font-family: system-ui, sans-serif; }
 /* Laptop: text column beside a large character, rather than a scaled-up phone layout (R20). */
 @media (min-width: 900px) {
   .main__content {
-    height: auto;
-    min-height: 100dvh;
     grid-template-columns: minmax(320px, 1fr) minmax(320px, 1fr);
     grid-template-rows: 1fr auto;
     grid-template-areas: 'summary character' 'bar character';
@@ -149,7 +149,7 @@ body { margin: 0; font-family: system-ui, sans-serif; }
   .main__summary { grid-area: summary; align-self: end; max-width: 34rem; }
   .main__bar { grid-area: bar; justify-content: flex-start; align-self: start; }
   .main__character { grid-area: character; align-items: center; }
-  .main__character img { height: min(80dvh, 720px); max-height: none; }
+  .main__character img { height: clamp(240px, 80dvh, 720px); }
   .main__condition { font-size: 2rem; }
   .main__range { font-size: 3.5rem; }
   .main__recommendation { font-size: 1.75rem; }
