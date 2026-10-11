@@ -117,6 +117,53 @@ During implementation, follow the approved plan in working checkpoints and keep 
 - [ ] Save all chat transcripts
 - [ ] Complete the debrief
 
+## Requirement verification
+
+Evidence status as of 2026-10-11. **Verified** means a check was run and recorded; **Open** means it still needs a check on the live site (https://thearkx60.github.io/unit-3-weather/). The Developer runs the Open rows and updates this table; the Agent does not mark them closed.
+
+| Req | Acceptance check | Evidence so far | Status | To close |
+|---|---|---|---|---|
+| R1 | "Austin, TX" returns a match and loads weather | Developer, local (CP3) and live (CP8) | Verified | none |
+| R2 | Device location loads weather and shows "Your location" | Developer, local (CP3) and live phone (CP8) | Verified | none |
+| R3 | Selecting B after A, reload shows B | Developer, local: Dallas replaced Austin (CP3); live reload kept location (CP8) | Verified | none |
+| R4 | Clear control removes saved location; next visit prompts | Developer, local (CP6) | Verified | optionally repeat on live |
+| R5 | A date 3 days out shows that day's forecast, not today's | Day navigation works (CP5); data not compared to a source | Open | open a day 3 out and compare its range and condition to Open-Meteo's own page for the same coordinates |
+| R6 | No control reaches day 8 or a past date | Date picker lists only 7 days (CP5); unit test drops out-of-range trip dates | Open | on live, type `#main/<date 8 days out>` and a past date; each should show today |
+| R7 | Location, date, F range, Today vs forecast label | Developer viewed today and forecast dates (CP4/5) | Verified | none |
+| R8 | "Open-Meteo" label under summary, away from character | Developer (CP4) | Verified | none |
+| R9 | Character in outfit from state; effect when not Clear | Developer, all 4 conditions x 5 bands via preview (CP4) | Verified | none |
+| R10 | Recommendation and reminders with icon and text | Developer (CP4); automated icon/text pairing 0 failures (CP7) | Verified | none |
+| R11 | Picker icon and text match the live forecast's primary condition | List viewed; not compared to a source | Open | compare the 7 rows' conditions to Open-Meteo's forecast for the same coordinates |
+| R12 | Tap / right-click opens that day | Developer: mouse and phone mode (CP5), live phone (CP8) | Verified | none |
+| R13 | Hold / left-click starts multi-select; taps add; OK confirms | Developer: mouse and phone mode (CP5), live phone (CP8) | Verified | none |
+| R14 | 3-day selection shows exactly 3 rows, each opens its day | Developer (CP5); unit test for 3 trip dates | Verified | none |
+| R15 | All five disclosures present and readable | Developer reviewed About (CP6) | Verified | none |
+| R16 | Spinner visible right after location/date change, gone after load | Spinner built and styled (CP4); never explicitly watched | Open | DevTools Network, throttle to Slow 3G, change date or location, confirm spinner then content |
+| R17 | Denying location shows the denied state | Screen checked via `#error/denied` (CP6); real denial on live phone (CP8) | Verified | none |
+| R18 | Failed request shows "weather unavailable" with retry | Screen seen via demo hook (CP6, hook now removed); real failure not yet tested | Open | DevTools Network: block request URL `api.open-meteo.com`, reload, confirm the screen; unblock, press Try again |
+| R19 | Nonsense location shows "character not found" | Developer, `zzzzqq` (CP6) | Verified | none |
+| R20 | Resizing swaps layouts at a defined breakpoint, nothing broken | Developer at rest on phone and tablet/laptop sizes (CP7); no overflow at 899 and 900px | Verified | none |
+| R21 | All targets at least 24x24 px | Automated, 55 measurements, 0 failures (CP7) | Verified | none |
+| R22 | 4.5:1 text, 3:1 large text/icons on each background | Automated WCAG formula incl. worst case behind effects, 0 failures (CP7) | Verified | optionally spot-check one background in DevTools' contrast picker |
+| R23 | Screen reader announces text with each icon | Developer, Windows Narrator (CP7); automated pairing check | Verified | none |
+| R24 | Grayscale view still conveys active reminders | Developer, Achromatopsia emulation (CP7) | Verified | none |
+| R25 | No account UI; no analytics script | Static site, no such code written | Open | view page source and Network tab on live: only GitHub Pages files and Open-Meteo requests |
+| R26 | localStorage holds only location and variant numbers; location sent only to Open-Meteo | Code reviewed; not inspected | Open | DevTools, Application, Local Storage: keys should be `location` and `variants:<date>` only; Network tab: location goes only to Open-Meteo |
+| R27 | Open-Meteo 90-day logging disclosed | Developer reviewed About (CP6) | Verified | none |
+| R28 | Art credits and licenses listed | Developer reviewed About (CP6) | Verified | none |
+| R29 | Public HTTPS URL loads the working app, no build | Developer, laptop and phone (CP8); Agent confirmed build and 200s | Verified | none |
+
+### Other verification items from the checklist
+
+| Check | Evidence so far | Status | To close |
+|---|---|---|---|
+| Multiple locations, current and forecast dates | Austin and Dallas, device location | Open | try at least 3 more places on the live site, for example Fairbanks AK (cold or snow), Miami FL (hot, rain), Chicago IL (wind), and compare the outfit and condition to the actual forecast |
+| All recommendation categories | 4 conditions x 5 bands via preview; unit tests for thresholds | Verified | none |
+| Outfit and reminder variations chosen independently | Unit test: all 9 outfit x wording pairs occur over 300 dates | Verified | none |
+| Returning to a date shows the same variations | Unit test (50 reads); Developer revisited dates | Verified | none |
+| Failure states | Not found, denied checked; unavailable screen seen via hook | Open | covered by R18 and R17 above |
+| Deployed app on a real phone and a laptop | Developer, one-handed use, both screens (CP8) | Verified | optionally repeat Narrator on the deployed laptop version |
+
 ## Usability testing
 
 Before testing, record the purpose, a few realistic tasks, non-leading prompts, and a consistent note format. For each session, use a non-identifying label and record the task, what the tester did or said, successes, barriers or questions, and possible changes. Keep observations separate from interpretations. After all three sessions, summarize the strongest findings and the improvement they support.
