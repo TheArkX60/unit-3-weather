@@ -12,6 +12,7 @@ const BAND_LINES = {
 // Clear days add nothing after the band line.
 const CONDITION_LINES = {
   Clear: '',
+  Cloudy: '',
   Rainy: "It's rainy. Bring an umbrella.",
   Snowy: "It's snowy. Dress warm and watch your step.",
   Windy: "It's windy. Wear something that stays put.",
@@ -24,7 +25,7 @@ const REMINDER_WORDING = {
   hydration: ['Drink extra water.', 'Stay hydrated today.', "It's hot, so carry a water bottle."],
 };
 
-export const CONDITION_ICON = { Clear: 'sunny', Rainy: 'rainy', Snowy: 'snowing', Windy: 'air' };
+export const CONDITION_ICON = { Clear: 'sunny', Cloudy: 'cloud', Rainy: 'rainy', Snowy: 'snowing', Windy: 'air' };
 export const REMINDER_ICON = { umbrella: 'umbrella', sunscreen: 'sunny', hydration: 'water-drop' };
 
 /** The written recommendation: band line plus the condition line, if any. */

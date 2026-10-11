@@ -16,6 +16,7 @@ body { margin: 0; font-family: system-ui, sans-serif; }
   mask: var(--icon) center / contain no-repeat;
 }
 .icon--sunny { --icon: url(../assets/icons/sunny.svg); }
+.icon--cloud { --icon: url(../assets/icons/cloud.svg); }
 .icon--rainy { --icon: url(../assets/icons/rainy.svg); }
 .icon--snowing { --icon: url(../assets/icons/snowing.svg); }
 .icon--air { --icon: url(../assets/icons/air.svg); }
@@ -96,6 +97,7 @@ body { margin: 0; font-family: system-ui, sans-serif; }
 }
 /* One background per condition; each keeps white text above 4.5:1 (R22). */
 .main[data-condition='clear'] { --bg: #a94a00; }
+.main[data-condition='cloudy'] { --bg: #5a6772; }
 .main[data-condition='rainy'] { --bg: #2f5f8f; }
 .main[data-condition='snowy'] { --bg: #3a6786; }
 .main[data-condition='windy'] { --bg: #2a6f63; }
@@ -217,6 +219,7 @@ body:has(.list-screen:not([hidden])) { background: #24323f; }
   touch-action: manipulation;
 }
 .day-row[data-condition='clear'] { --row-bg: #a94a00; }
+.day-row[data-condition='cloudy'] { --row-bg: #5a6772; }
 .day-row[data-condition='rainy'] { --row-bg: #2f5f8f; }
 .day-row[data-condition='snowy'] { --row-bg: #3a6786; }
 .day-row[data-condition='windy'] { --row-bg: #2a6f63; }

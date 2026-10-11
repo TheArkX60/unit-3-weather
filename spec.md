@@ -71,7 +71,7 @@ Translate every fixed brief requirement and the selected research-driven feature
 
 - **R7. Core info.** The main screen shows the location name (or "Your location"), the selected date, the temperature range in Fahrenheit, and whether the data is current or a forecast (e.g. "Today" vs. a specific future date label). Acceptance check: viewing a forecast date shows that date, not "Today."
 - **R8. Data source credit.** A small, muted text label reading "Open-Meteo" appears directly under the weather summary and temperature range, visually separated from the character. Acceptance check: the label is present on every main-screen view and does not overlap or sit adjacent to the character.
-- **R9. Character and outfit.** The character fills the lower portion of the screen, wearing the outfit variation selected by the current recommendation state; when condition is not Clear, an atmospheric weather effect (falling rain, falling snow, or wind-swirl lines) layers over the scene (see Recommendation state and data flow).
+- **R9. Character and outfit.** The character fills the lower portion of the screen, wearing the outfit variation selected by the current recommendation state; when condition is Rainy, Snowy, or Windy, an atmospheric weather effect (falling rain, falling snow, or wind-swirl lines) layers over the scene; Clear and Cloudy have no effect (see Recommendation state and data flow).
 - **R10. Written recommendation and reminders.** A short written recommendation and any active reminder badges (umbrella, sunscreen, hydration) appear above the character, each reminder paired with an icon and a short text label (not color alone, per WCAG 1.4.1).
 
 ### Date picker and trip overview (additional feature)
@@ -115,13 +115,14 @@ Translate every fixed brief requirement and the selected research-driven feature
 
 Define the weather inputs, recommendation categories, coded rules, and shared state. Weather values must come from the provider, and rules must follow the weather guidance cited in `research.md`. The selected location, date, and live weather data must produce one recommendation state that drives every visual and written output.
 
-**Weather inputs** (fetched from Open-Meteo for the selected location and date): apparent ("feels like") temperature, precipitation probability, precipitation type, sustained wind speed, UV index. (Open-Meteo has no heat index field; apparent temperature is used in its place, see Revisions.)
+**Weather inputs** (fetched from Open-Meteo for the selected location and date): apparent ("feels like") temperature, precipitation probability, precipitation type, sustained wind speed, UV index, average daily cloud cover. (Open-Meteo has no heat index field; apparent temperature is used in its place, see Revisions.)
 
-**Condition category** (one of four, checked in priority order — the first match wins):
+**Condition category** (one of five, checked in priority order — the first match wins):
 1. **Snowy** — precipitation type = snow.
 2. **Rainy** — precipitation probability ≥ 30%.
 3. **Windy** — sustained wind ≥ 20 mph.
-4. **Clear** — none of the above.
+4. **Cloudy** — average daily cloud cover ≥ 60%.
+5. **Clear** — none of the above (so a partly cloudy day is Clear).
 
 **Temperature band** (one of five, by the average of the day's low and high apparent temperature): Hot (≥ 85°F), Warm (70–84°F), Mild (55–69°F), Cool (40–54°F), Cold (< 40°F).
 
@@ -132,7 +133,7 @@ Define the weather inputs, recommendation categories, coded rules, and shared st
 ```
 {
   location, date,
-  condition,        // Snowy | Rainy | Windy | Clear
+  condition,        // Snowy | Rainy | Windy | Cloudy | Clear
   temperatureBand,   // Hot | Warm | Mild | Cool | Cold
   reminders,         // array, any of: umbrella, sunscreen, hydration
   outfitVariant,     // 1-3, randomly chosen per temperatureBand (see Content variation)
@@ -140,7 +141,7 @@ Define the weather inputs, recommendation categories, coded rules, and shared st
 }
 ```
 
-**Rendering from state:** the character shows the complete outfit image for `temperatureBand` + `outfitVariant`; if `condition` is not Clear, the matching atmospheric effect (falling rain, falling snow, or wind-swirl lines) layers over the whole scene — not on the character itself; the weather icon reflects `condition`; the written recommendation text reflects `temperatureBand` and `condition` (and names the needed gear, e.g. "it's rainy — bring an umbrella," since no on-character rain gear exists); reminder badges render for each entry in `reminders`, each with its own icon and the wording selected by `reminderVariants`.
+**Rendering from state:** the character shows the complete outfit image for `temperatureBand` + `outfitVariant`; if `condition` is Rainy, Snowy, or Windy, the matching atmospheric effect (falling rain, falling snow, or wind-swirl lines) layers over the whole scene — not on the character itself; the weather icon reflects `condition`; the written recommendation text reflects `temperatureBand` and `condition` (and names the needed gear, e.g. "it's rainy — bring an umbrella," since no on-character rain gear exists); reminder badges render for each entry in `reminders`, each with its own icon and the wording selected by `reminderVariants`.
 
 ## Content variation
 
@@ -160,12 +161,12 @@ The character and all outfit pieces come from nonemo's "Character Creation Asset
 |---|---|---|---|---|
 | Base character | 1 | Main screen, trip overview | PNG/SVG (as provided by pack) | nonemo "Character Creation Asset Pack," CC0 |
 | Complete outfit images (3 per temperature band × 5 bands, assembled by `scripts/build_outfits.py` from the pack's shirt, sleeve, and pants/shorts pieces; shoes are part of the bottoms) | 15 | Main screen, trip overview (1 representative per day) | PNG/SVG | nonemo "Character Creation Asset Pack," CC0 |
-| Weather condition icons: `sunny` (Clear), `rainy` (Rainy), `snowing` (Snowy), `air`/`wind_power` (Windy) | 4 | Main screen, date picker, trip overview | SVG/font | Material Symbols (Google), Apache 2.0 |
+| Weather condition icons: `sunny` (Clear), `cloud` (Cloudy), `rainy` (Rainy), `snowing` (Snowy), `air`/`wind_power` (Windy) | 5 | Main screen, date picker, trip overview | SVG/font | Material Symbols (Google), Apache 2.0 |
 | Reminder icons: `umbrella` (Umbrella), `water_drop` (Hydration), `sunny` reused (Sunscreen — distinguished by its own text label per R23, no dedicated "sunscreen" icon exists in the set) | 3 (2 unique + 1 reused) | Reminder badges on main screen | SVG/font | Material Symbols (Google), Apache 2.0 |
 | Atmospheric weather effects (falling rain, falling snow, wind-swirl lines) | 3 | Layered over the whole scene when condition ≠ Clear | SVG/CSS animation | Can be custom-built (simple CSS/SVG animation), no license concern |
 | Loading spinner | 1 | Loading state (all screens, during data fetch) | SVG/CSS | Custom-built (e.g. CSS animation), no license concern |
 
-Total: 16 character-pack pieces + 6 unique icons + 3 atmospheric effects + 1 spinner ≈ **26 pieces**, consistent with the 25–30 estimate in `research.md`. The info screen's Art credit disclosure (R15/R28) names both nonemo's pack (CC0) and Material Symbols (Apache 2.0).
+Total: 16 character-pack pieces + 7 unique icons + 3 atmospheric effects + 1 spinner ≈ **27 pieces**, consistent with the 25–30 estimate in `research.md`. The info screen's Art credit disclosure (R15/R28) names both nonemo's pack (CC0) and Material Symbols (Apache 2.0).
 
 ## Out of scope
 
@@ -188,6 +189,7 @@ After implementation or testing, record requirement changes and the evidence tha
 - **2026-10-11 — Outfit art assembled; Cold distinguished by face.** The pack has no shoe pieces; shoes are built into the pants, shorts, and bare-legs bottoms. Cool and Cold would otherwise look identical, so Cold uses darker colors and a shivering face instead of added gear (Developer's idea, chosen over a custom scarf or beanie to keep the art consistent and avoid new assets). The 15 outfits are generated by `scripts/build_outfits.py` into `assets/outfits/` (skin `tint_2`, black hair, `cute` face; Cold uses closed eyes and clenched teeth). Developer approved the outfit sheet.
 - **2026-10-11 — Sunscreen hidden on very wet days.** With real data, a day with a ~33% rain chance showed Rainy plus a sunscreen reminder, which read oddly. The Sunscreen reminder is now suppressed when precipitation probability ≥ 60%; below that, reminders stay independent. Developer chose this over keeping the rule unchanged or hiding sunscreen on every Rainy/Snowy day (Checkpoint 4).
 - **2026-10-11 — R26 widened to include variant choices (Checkpoint 6).** The Persistence rule stores each date's outfit and wording variant numbers in `localStorage`, so "only the location" was inaccurate. R26 and the info screen's privacy text now say both are stored locally; neither contains personal data. Developer approved.
+- **2026-10-11 — Cloudy condition added (verification of R11).** Comparing the date picker with Open-Meteo for Austin showed days its own data called overcast (weather code 3) or drizzly labelled "Clear" with a sun icon, which could read as wrong. A fifth condition, **Cloudy**, now sits between Windy and Clear in the priority order: average daily cloud cover ≥ 60% (Open-Meteo `cloud_cover_mean`, a judgment-call threshold like the others, chosen over the coarser `weather_code`, which marked a day overcast that averaged only 34% cloud). Cloudy has a gray-blue background (`#5A6772`, 5.8:1 with white text), the Material Symbols `cloud` icon (Apache 2.0), no atmospheric effect, and no extra recommendation sentence; reminders are unchanged (sunscreen still follows UV). "Clear" now explicitly means none of the other four. Evidence: Austin forecast of 2026-10-11 (cloud cover 34, 54, 44, 57, 2, 86, 63% across the 7 days). Developer approved.
 - **2026-10-11 — Main screen layout and styling decisions (Checkpoint 4).** Background color follows the condition (Clear orange, Rainy blue, Snowy slate blue, Windy teal), each at 5.7:1 or better against white text. The laptop layout is side-by-side (text column left, character right) per R20; the laptop drawing's centered stack is superseded. On phone, the date and location controls and a new "About" link to the info screen sit in a bottom bar for one-handed reach, so they no longer sit at the top as drawn. The summary and bottom controls sit on a 55% dark scrim above the effect layer so weather effects never hide text (black text was rejected: 3.2-3.7:1 on these backgrounds fails R22).
 
 ## Approval

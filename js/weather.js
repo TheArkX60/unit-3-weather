@@ -17,7 +17,7 @@ export async function fetchForecast(latitude, longitude) {
     latitude,
     longitude,
     current: 'temperature_2m,apparent_temperature,precipitation,snowfall,wind_speed_10m,uv_index',
-    daily: 'apparent_temperature_max,apparent_temperature_min,precipitation_probability_max,snowfall_sum,wind_speed_10m_max,uv_index_max,weather_code',
+    daily: 'apparent_temperature_max,apparent_temperature_min,precipitation_probability_max,snowfall_sum,wind_speed_10m_max,uv_index_max,cloud_cover_mean,weather_code',
     temperature_unit: 'fahrenheit',
     wind_speed_unit: 'mph',
     precipitation_unit: 'inch',

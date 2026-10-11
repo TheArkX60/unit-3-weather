@@ -6,6 +6,7 @@ import { resolveVariants } from './variants.js';
 export const RULES = {
   rainChancePct: 30,
   windyMph: 20,
+  cloudyPct: 60, // average daily cloud cover
   sunscreenUv: 3,
   sunscreenHiddenRainPct: 60, // very wet days drop the sunscreen reminder
   hydrationApparentF: 90,
@@ -24,14 +25,16 @@ export function dayFromForecast(daily, date) {
     snowfallIn: daily.snowfall_sum[i],
     windMaxMph: daily.wind_speed_10m_max[i],
     uvMax: daily.uv_index_max[i],
+    cloudMeanPct: daily.cloud_cover_mean[i],
   };
 }
 
-/** Snowy > Rainy > Windy > Clear; first match wins. */
+/** Snowy > Rainy > Windy > Cloudy > Clear; first match wins. */
 export function conditionFor(day) {
   if (day.snowfallIn > 0) return 'Snowy';
   if (day.precipChancePct >= RULES.rainChancePct) return 'Rainy';
   if (day.windMaxMph >= RULES.windyMph) return 'Windy';
+  if (day.cloudMeanPct >= RULES.cloudyPct) return 'Cloudy';
   return 'Clear';
 }
 

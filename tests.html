@@ -39,7 +39,7 @@
       _m: m,
     };
   };
-  const day = (o = {}) => ({ apparentMax: 75, apparentMin: 65, precipChancePct: 0, snowfallIn: 0, windMaxMph: 5, uvMax: 1, ...o });
+  const day = (o = {}) => ({ apparentMax: 75, apparentMin: 65, precipChancePct: 0, snowfallIn: 0, windMaxMph: 5, uvMax: 1, cloudMeanPct: 0, ...o });
 
   section('Recommendation state: condition (Checkpoint 2)');
   // Condition priority: Snowy > Rainy > Windy > Clear
@@ -50,6 +50,12 @@
   check('not rainy at 29%', conditionFor(day({ precipChancePct: 29 })), 'Clear');
   check('rain beats wind', conditionFor(day({ precipChancePct: 50, windMaxMph: 30 })), 'Rainy');
   check('snow beats rain+wind', conditionFor(day({ snowfallIn: 0.1, precipChancePct: 90, windMaxMph: 30 })), 'Snowy');
+  check('cloudy at 60% cloud cover', conditionFor(day({ cloudMeanPct: 60 })), 'Cloudy');
+  check('not cloudy at 59%', conditionFor(day({ cloudMeanPct: 59 })), 'Clear');
+  check('wind beats cloud', conditionFor(day({ cloudMeanPct: 95, windMaxMph: 25 })), 'Windy');
+  check('rain beats cloud', conditionFor(day({ cloudMeanPct: 95, precipChancePct: 40 })), 'Rainy');
+  check('snow beats cloud', conditionFor(day({ cloudMeanPct: 95, snowfallIn: 0.2 })), 'Snowy');
+  check('cloud cover does not change reminders (UV still triggers sunscreen)', remindersFor(day({ cloudMeanPct: 90, uvMax: 5 })), ['sunscreen']);
 
   section('Recommendation state: temperature bands (Checkpoint 2)');
   // Temperature bands (midpoint of min/max apparent temperature)
@@ -119,14 +125,15 @@
     time: ['2026-10-10', '2026-10-11'],
     apparent_temperature_max: [93.9, 91.1], apparent_temperature_min: [59.5, 71.7],
     precipitation_probability_max: [0, 1], snowfall_sum: [0, 0],
-    wind_speed_10m_max: [7.7, 12.8], uv_index_max: [6.35, 6.2],
+    wind_speed_10m_max: [7.7, 12.8], uv_index_max: [6.35, 6.2], cloud_cover_mean: [34, 86],
   };
   check('dayFromForecast finds date', dayFromForecast(daily, '2026-10-11').apparentMax, 91.1);
+  check('dayFromForecast reads cloud cover', dayFromForecast(daily, '2026-10-11').cloudMeanPct, 86);
   check('dayFromForecast null out of range', dayFromForecast(daily, '2026-12-01'), null);
   const s = buildState({ location: 'Austin, TX', date: '2026-10-11', day: dayFromForecast(daily, '2026-10-11') }, fakeStorage());
   check('state: condition/band/reminders/range',
     [s.condition, s.temperatureBand, s.reminders, s.temperatureRangeF],
-    ['Clear', 'Warm', ['sunscreen', 'hydration'], [72, 91]]);
+    ['Cloudy', 'Warm', ['sunscreen', 'hydration'], [72, 91]]);
   check('state has every spec key',
     ['location', 'date', 'condition', 'temperatureBand', 'reminders', 'outfitVariant', 'reminderVariants'].every((k) => k in s), true);
 
@@ -156,7 +163,7 @@
   check('Rainy: band + umbrella line', recommendationText(st({ temperatureBand: 'Cool', condition: 'Rainy' })),
     "It's cool. Wear long sleeves. It's rainy. Bring an umbrella.");
   check('every band x condition yields text', ['Hot', 'Warm', 'Mild', 'Cool', 'Cold'].every((b) =>
-    ['Clear', 'Rainy', 'Snowy', 'Windy'].every((c) => recommendationText(st({ temperatureBand: b, condition: c })).length > 10)), true);
+    ['Clear', 'Cloudy', 'Rainy', 'Snowy', 'Windy'].every((c) => recommendationText(st({ temperatureBand: b, condition: c })).length > 10)), true);
   check('3 wordings per reminder, all different', ['umbrella', 'sunscreen', 'hydration'].every((r) =>
     new Set([1, 2, 3].map((v) => reminderText(r, v))).size === 3), true);
   check('reminder variant 2 picks the second wording', reminderText('umbrella', 2), "Don't forget your umbrella.");

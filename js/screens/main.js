@@ -45,8 +45,8 @@ export function renderMain(state, today) {
   character.src = `assets/outfits/${state.temperatureBand.toLowerCase()}-${state.outfitVariant}.svg`;
   character.alt = `Character dressed for ${state.temperatureBand.toLowerCase()} weather`;
 
-  // Effect layers over the whole scene, never the character itself; Clear has none.
-  $('main-effect').className = state.condition === 'Clear' ? 'effect' : `effect effect--${EFFECT[state.condition]}`;
+  // Effect layers over the whole scene, never the character itself; Clear and Cloudy have none.
+  $('main-effect').className = EFFECT[state.condition] ? `effect effect--${EFFECT[state.condition]}` : 'effect';
 }
 
 const EFFECT = { Rainy: 'rain', Snowy: 'snow', Windy: 'wind' };
