@@ -21,7 +21,7 @@ const CONDITION_LINES = {
 // Three wordings per reminder; reminderVariants (1-3) picks one.
 const REMINDER_WORDING = {
   umbrella: ['Bring an umbrella.', "Don't forget your umbrella.", "Rain's likely, so pack an umbrella."],
-  sunscreen: ['Wear sunscreen.', 'Put on sunscreen before you go.', "The sun's out, so sunscreen up."],
+  sunscreen: ['Wear sunscreen.', 'Put on sunscreen before you go.', 'UV is high, so sunscreen up.'],
   hydration: ['Drink extra water.', 'Stay hydrated today.', "It's hot, so carry a water bottle."],
 };
 
