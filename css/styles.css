@@ -108,8 +108,9 @@ body { margin: 0; font-family: system-ui, sans-serif; }
 .main__error a, .main__bar a { color: inherit; }
 
 /* Phone: summary on top, character fills the lower area, controls anchored at the bottom for the thumb. */
+/* Phone: exactly one screen tall, so the bottom bar is always visible; the character row shrinks to fit. */
 .main__content {
-  min-height: 100dvh;
+  height: 100dvh;
   display: grid;
   grid-template-rows: auto 1fr auto;
   padding: 1rem;
@@ -127,8 +128,8 @@ body { margin: 0; font-family: system-ui, sans-serif; }
   min-height: 44px; padding: 0 .9rem;
   background: #fff; color: #1d1d1d; border-radius: 999px; font-weight: 600;
 }
-.main__character { display: flex; align-items: flex-end; justify-content: center; min-height: 0; }
-.main__character img { height: min(48dvh, 440px); max-width: 100%; width: auto; }
+.main__character { display: flex; align-items: flex-end; justify-content: center; min-height: 0; overflow: hidden; }
+.main__character img { height: 100%; max-height: 440px; max-width: 100%; width: auto; }
 .main__bar { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
 .main__bar a {
   display: inline-flex; align-items: center; justify-content: center;
@@ -140,6 +141,8 @@ body { margin: 0; font-family: system-ui, sans-serif; }
 /* Laptop: text column beside a large character, rather than a scaled-up phone layout (R20). */
 @media (min-width: 900px) {
   .main__content {
+    height: auto;
+    min-height: 100dvh;
     grid-template-columns: minmax(320px, 1fr) minmax(320px, 1fr);
     grid-template-rows: 1fr auto;
     grid-template-areas: 'summary character' 'bar character';
@@ -149,7 +152,7 @@ body { margin: 0; font-family: system-ui, sans-serif; }
   .main__summary { grid-area: summary; align-self: end; max-width: 34rem; }
   .main__bar { grid-area: bar; justify-content: flex-start; align-self: start; }
   .main__character { grid-area: character; align-items: center; }
-  .main__character img { height: min(80dvh, 720px); }
+  .main__character img { height: min(80dvh, 720px); max-height: none; }
   .main__condition { font-size: 2rem; }
   .main__range { font-size: 3.5rem; }
   .main__recommendation { font-size: 1.75rem; }
@@ -170,3 +173,116 @@ body { margin: 0; font-family: system-ui, sans-serif; }
 @media (min-width: 900px) {
   .main__summary { padding: 1.5rem 2rem; }
 }
+
+/* ---- Date picker and trip overview ---- */
+/* Column layout so the action buttons sit at the bottom of the screen, within thumb reach. */
+.list-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 1rem;
+  color: #fff;
+}
+/* Full-width dark backdrop behind the centered column. */
+body:has(.list-screen:not([hidden])) { background: #24323f; }
+.list-screen__header { display: flex; align-items: center; gap: 1rem; }
+.list-screen__header h1 { margin: 0; font-size: 1.5rem; }
+.list-screen__back { color: inherit; display: inline-flex; align-items: center; min-height: 48px; min-width: 48px; font-weight: 600; }
+.list-screen__hint { font-size: 1.05rem; }
+.list-screen__loading { display: grid; place-items: center; min-height: 40dvh; }
+.list-screen__error { font-size: 1.25rem; }
+
+.day-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+.day-row {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr auto;
+  align-items: center;
+  gap: .75rem;
+  width: 100%;
+  min-height: 64px;
+  box-sizing: border-box;
+  padding: .75rem 1rem;
+  border: 3px solid transparent;
+  border-radius: 16px;
+  background: var(--row-bg, #3a6786);
+  color: #fff;
+  font: inherit;
+  font-size: 1.1rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  /* A long-press must start selecting, not open the browser text-select or context callout. */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+.day-row[data-condition='clear'] { --row-bg: #a94a00; }
+.day-row[data-condition='rainy'] { --row-bg: #2f5f8f; }
+.day-row[data-condition='snowy'] { --row-bg: #3a6786; }
+.day-row[data-condition='windy'] { --row-bg: #2a6f63; }
+.day-row__date { font-weight: 700; }
+.day-row__weather { display: flex; align-items: center; gap: .4rem; }
+.day-row__range { font-weight: 600; white-space: nowrap; }
+.day-row__check { grid-column: 1 / -1; font-weight: 700; }
+/* Selected = thick white border plus a visible "Selected" label, so it never relies on color alone. */
+.day-row.is-selected { border-color: #fff; }
+.day-row:focus-visible, .list-screen__actions button:focus-visible, .list-screen__back:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+.day-row--trip { grid-template-columns: 6.5rem 1fr auto 56px; }
+.day-row__outfit { height: 64px; width: auto; justify-self: end; }
+
+/* Actions stay at the bottom of the screen for one-handed reach. */
+.list-screen__actions {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  gap: .75rem;
+  justify-content: flex-end;
+  padding: 1rem 0;
+  background: linear-gradient(transparent, #24323f 35%);
+}
+.list-screen__actions button {
+  min-height: 48px;
+  min-width: 96px;
+  padding: 0 1.25rem;
+  border: 2px solid #fff;
+  border-radius: 999px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.list-screen__actions #dates-ok { background: #fff; color: #1d1d1d; }
+.list-screen__actions button:disabled { opacity: .55; cursor: not-allowed; }
+
+@media (min-width: 900px) {
+  .list-screen { padding: 2rem; }
+  .day-row { grid-template-columns: 8rem 1fr auto; font-size: 1.25rem; min-height: 72px; }
+  .day-row--trip { grid-template-columns: 8rem 1fr auto 72px; }
+  .day-row__outfit { height: 80px; }
+}
+
+/* Keep rows inside the screen: the list column may shrink below its content's natural width,
+   and long row text wraps instead of pushing the row past the right edge. */
+.day-list { grid-template-columns: minmax(0, 1fr); }
+.day-list > li { min-width: 0; }
+.day-row { min-width: 0; max-width: 100%; }
+.day-row > * { min-width: 0; }
+.day-row__weather { flex-wrap: wrap; }
+.day-row__range { white-space: normal; text-align: right; }
+@media (max-width: 420px) {
+  .day-row { grid-template-columns: 5.25rem 1fr auto; gap: .5rem; padding: .75rem; font-size: 1rem; }
+  .day-row--trip { grid-template-columns: 5.25rem 1fr auto 48px; }
+  .day-row__outfit { height: 56px; }
+}
+
+/* List content fills the space between header and bottom actions. */
+.list-screen > div[id$='-content'] { flex: 1; display: flex; flex-direction: column; }
+.list-screen__actions { margin-top: auto; }

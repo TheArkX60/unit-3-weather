@@ -11,6 +11,8 @@
 <script type="module">
   import { conditionFor, temperatureBandFor, remindersFor, buildState, dayFromForecast } from './js/state.js';
   import { resolveVariants } from './js/variants.js';
+  import { toggleDate, tripDatesFromHash } from './js/selection.js';
+  import { summaryFor } from './js/state.js';
   import { recommendationText, reminderText, dateLabel, temperatureRangeText } from './js/text.js';
   import { saveLocation, loadLocation, clearLocation, labelFor, fromMatch } from './js/location.js';
 
@@ -151,6 +153,23 @@
   check('dateLabel today', dateLabel('2026-10-11', '2026-10-11'), 'Today');
   check('dateLabel forecast day', dateLabel('2026-10-13', '2026-10-11'), 'Tue, Oct 13');
   check('temperature range text', temperatureRangeText([72, 91]), '72–91°F');
+
+  // Trip selection (js/selection.js) and list summaries
+  check('toggle adds a day', toggleDate([], '2026-10-12'), ['2026-10-12']);
+  check('toggle keeps date order', toggleDate(['2026-10-14'], '2026-10-12'), ['2026-10-12', '2026-10-14']);
+  check('toggle removes an already selected day', toggleDate(['2026-10-12', '2026-10-14'], '2026-10-12'), ['2026-10-14']);
+  const valid = ['2026-10-11', '2026-10-12', '2026-10-13'];
+  check('trip hash: valid dates kept, sorted', tripDatesFromHash('2026-10-13,2026-10-11', valid), ['2026-10-11', '2026-10-13']);
+  check('trip hash: out-of-range dates dropped (R6)', tripDatesFromHash('2026-10-12,2026-12-25,2026-10-01', valid), ['2026-10-12']);
+  check('trip hash: duplicates collapsed', tripDatesFromHash('2026-10-12,2026-10-12', valid), ['2026-10-12']);
+  check('trip hash: empty', tripDatesFromHash(undefined, valid), []);
+  check('3 selected days -> exactly 3 trip dates', tripDatesFromHash('2026-10-11,2026-10-12,2026-10-13', valid).length, 3);
+  check('summaryFor', summaryFor(day({ precipChancePct: 40, apparentMin: 45, apparentMax: 51 })),
+    { condition: 'Rainy', temperatureBand: 'Cool', temperatureRangeF: [45, 51] });
+  // Summaries must not roll variants for days the user has not opened
+  const before = Object.keys(JSON.parse(JSON.stringify(localStorage)));
+  summaryFor(day());
+  check('summaryFor writes nothing to localStorage', Object.keys(JSON.parse(JSON.stringify(localStorage))), before);
 
   out.insertAdjacentHTML('beforeend', `\n<b>${failures === 0 ? 'ALL TESTS PASSED' : failures + ' FAILED'}</b>\n`);
   document.title = failures === 0 ? 'PASS' : 'FAIL';

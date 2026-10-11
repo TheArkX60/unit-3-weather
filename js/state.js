@@ -53,6 +53,18 @@ export function remindersFor(day) {
   return reminders;
 }
 
+/**
+ * Light summary of a forecast day for lists (date picker, trip overview).
+ * Deliberately does not touch variants: a date's random variants are only rolled when it is opened.
+ */
+export function summaryFor(day) {
+  return {
+    condition: conditionFor(day),
+    temperatureBand: temperatureBandFor(day),
+    temperatureRangeF: [Math.round(day.apparentMin), Math.round(day.apparentMax)],
+  };
+}
+
 /** Build the full recommendation state for a location + date + forecast day. */
 export function buildState({ location, date, day }, storage) {
   const reminders = remindersFor(day);

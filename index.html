@@ -38,8 +38,40 @@
       </div>
       <div id="main-effect" class="effect" aria-hidden="true"></div>
     </section>
-    <section id="screen-dates" class="screen" hidden><h1>Date picker</h1><p>Placeholder</p></section>
-    <section id="screen-trip" class="screen" hidden><h1>Trip overview</h1><p>Placeholder</p></section>
+    <section id="screen-dates" class="screen list-screen" hidden>
+      <header class="list-screen__header">
+        <a class="list-screen__back" href="#main">&larr; Back</a>
+        <h1>Pick a day</h1>
+      </header>
+      <div id="dates-loading" class="list-screen__loading">
+        <div class="spinner" role="status"><span class="visually-hidden">Loading weather</span></div>
+      </div>
+      <p id="dates-error" class="list-screen__error" role="alert" hidden>Weather is unavailable right now.</p>
+      <div id="dates-content" hidden>
+        <p id="dates-hint" class="list-screen__hint"></p>
+        <p id="dates-status" class="visually-hidden" role="status"></p>
+        <ol id="dates-list" class="day-list"></ol>
+        <div class="list-screen__actions">
+          <button type="button" id="dates-plan">Plan a trip</button>
+          <button type="button" id="dates-cancel" hidden>Cancel</button>
+          <button type="button" id="dates-ok" hidden disabled>OK</button>
+        </div>
+      </div>
+    </section>
+    <section id="screen-trip" class="screen list-screen" hidden>
+      <header class="list-screen__header">
+        <a class="list-screen__back" href="#dates">&larr; Back</a>
+        <h1>Your trip</h1>
+      </header>
+      <div id="trip-loading" class="list-screen__loading">
+        <div class="spinner" role="status"><span class="visually-hidden">Loading weather</span></div>
+      </div>
+      <p id="trip-error" class="list-screen__error" role="alert" hidden>Weather is unavailable right now.</p>
+      <div id="trip-content" hidden>
+        <p id="trip-empty" class="list-screen__hint" hidden>No days selected. Go back and pick some.</p>
+        <ol id="trip-list" class="day-list"></ol>
+      </div>
+    </section>
     <section id="screen-info" class="screen" hidden><h1>Info</h1><p>Placeholder</p></section>
     <section id="screen-location" class="screen" hidden>
       <h1>Location</h1>
