@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145 166" width="145" height="166" role="img" aria-label="Mild outfit 2: orange dress, short sleeves, pants">
+<g transform="translate(0 0)"><path d="M19 70C19 49.5655 35.5655 33 56 33H89C109.435 33 126 49.5655 126 70V115C126 120.523 121.523 125 116 125H29C23.4772 125 19 120.523 19 115V70Z" fill="black"/></g>
+<g transform="translate(57.5 136)"><path d="M0 6.5C0 2.91015 2.91015 0 6.5 0V0C10.0899 0 13 2.91015 13 6.5V21.5C13 25.0899 10.0899 28 6.5 28V28C2.91015 28 0 25.0899 0 21.5V6.5Z" fill="#D08269"/></g>
+<g transform="translate(74.5 136)"><path d="M0 6.5C0 2.91015 2.91015 0 6.5 0V0C10.0899 0 13 2.91015 13 6.5V21.5C13 25.0899 10.0899 28 6.5 28V28C2.91015 28 0 25.0899 0 21.5V6.5Z" fill="#D08269"/></g>
+<g transform="translate(57.5 136)"><path d="M0 6.5C0 2.91015 2.91015 0 6.5 0V0C10.0899 0 13 2.91015 13 6.5V21.5C13 25.0899 10.0899 28 6.5 28V28C2.91015 28 0 25.0899 0 21.5V6.5Z" fill="#545AF2"/>
+<path d="M0 15H13V18H0V15Z" fill="white"/>
+<path d="M0 18H13V21.5C13 25.0899 10.0899 28 6.5 28V28C2.91015 28 0 25.0899 0 21.5V18Z" fill="black"/></g>
+<g transform="translate(74.5 136)"><path d="M0 6.5C0 2.91015 2.91015 0 6.5 0V0C10.0899 0 13 2.91015 13 6.5V21.5C13 25.0899 10.0899 28 6.5 28V28C2.91015 28 0 25.0899 0 21.5V6.5Z" fill="#545AF2"/>
+<path d="M0 15H13V18H0V15Z" fill="white"/>
+<path d="M0 18H13V21.5C13 25.0899 10.0899 28 6.5 28V28C2.91015 28 0 25.0899 0 21.5V18Z" fill="black"/></g>
+<g transform="translate(55 115)"><path d="M0 0H35V19C35 22.3137 32.3137 25 29 25H6C2.68629 25 0 22.3137 0 19V0Z" fill="#D08269"/></g>
+<g transform="translate(52.0 115)"><path d="M5 0H36L40.2823 21.4117C40.6536 23.268 39.2337 25 37.3406 25H3.65941C1.76627 25 0.346395 23.268 0.71767 21.4117L5 0Z" fill="#FF6933"/></g>
+<g transform="translate(47 116) rotate(15 6 0)"><rect width="12" height="28" rx="6" fill="#D08269"/></g>
+<g transform="translate(47 116) rotate(15 6 0)"><path d="M4.07919e-08 6C1.82632e-08 2.68629 2.68629 -1.82632e-08 6 -4.07919e-08V-4.07919e-08C9.31371 -6.33207e-08 12 2.68629 12 6L12 13L8.83825e-08 13L4.07919e-08 6Z" fill="#FF6933"/></g>
+<g transform="translate(86 116) rotate(-15 6 0)"><rect width="12" height="28" rx="6" fill="#D08269"/></g>
+<g transform="translate(86 116) rotate(-15 6 0)"><path d="M4.07919e-08 6C1.82632e-08 2.68629 2.68629 -1.82632e-08 6 -4.07919e-08V-4.07919e-08C9.31371 -6.33207e-08 12 2.68629 12 6L12 13L8.83825e-08 13L4.07919e-08 6Z" fill="#FF6933"/></g>
+<g transform="translate(0 0)"><rect x="11" y="76" width="123" height="29" rx="14.5" fill="#D08269"/>
+<rect x="19" y="83" width="107" height="15" rx="7.5" fill="#BE7159"/>
+<rect x="25" y="34" width="95" height="83" rx="30" fill="#D08269"/></g>
+<g transform="translate(0 0)"><path d="M68 90V90.5C68 92.9853 70.0147 95 72.5 95V95C74.9853 95 77 92.9853 77 90.5V90" stroke="black" stroke-width="3" stroke-linecap="round"/>
+<rect x="78" y="72" width="17" height="17" rx="8.5" fill="black"/>
+<rect x="80" y="74" width="8" height="8" rx="4" fill="white"/>
+<rect x="88" y="81" width="5" height="5" rx="2.5" fill="white"/>
+<rect x="50" y="72" width="17" height="17" rx="8.5" fill="black"/>
+<rect x="52" y="74" width="8" height="8" rx="4" fill="white"/>
+<rect x="60" y="81" width="5" height="5" rx="2.5" fill="white"/></g>
+<g transform="translate(0 0)"><path fill-rule="evenodd" clip-rule="evenodd" d="M74.0211 27.4645C75.9737 25.5118 79.1396 25.5118 81.0922 27.4645C82.8749 29.2472 83.03 32.0413 81.5574 34H90C106.569 34 120 47.4314 120 64V76H111C93.782 76 78.9838 65.6392 72.5 50.8119C66.0162 65.6392 51.218 76 34 76H25V64C25 47.4314 38.4315 34 55 34H67.4856L74.0211 27.4645Z" fill="black"/></g>
+</svg>
