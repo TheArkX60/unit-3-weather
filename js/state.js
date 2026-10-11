@@ -7,6 +7,7 @@ export const RULES = {
   rainChancePct: 30,
   windyMph: 20,
   sunscreenUv: 3,
+  sunscreenHiddenRainPct: 60, // very wet days drop the sunscreen reminder
   hydrationApparentF: 90,
   // Lower bound (°F) of each band, checked hottest first; anything below is Cold.
   bands: [['Hot', 85], ['Warm', 70], ['Mild', 55], ['Cool', 40]],
@@ -47,7 +48,7 @@ export function temperatureBandFor(day) {
 export function remindersFor(day) {
   const reminders = [];
   if (day.precipChancePct >= RULES.rainChancePct) reminders.push('umbrella');
-  if (day.uvMax >= RULES.sunscreenUv) reminders.push('sunscreen');
+  if (day.uvMax >= RULES.sunscreenUv && day.precipChancePct < RULES.sunscreenHiddenRainPct) reminders.push('sunscreen');
   if (day.apparentMax >= RULES.hydrationApparentF) reminders.push('hydration');
   return reminders;
 }

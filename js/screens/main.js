@@ -1,0 +1,64 @@
+// Main screen: renders entirely from the recommendation state (never from raw weather).
+import {
+  CONDITION_ICON, REMINDER_ICON,
+  recommendationText, reminderText, dateLabel, temperatureRangeText,
+} from '../text.js';
+
+const $ = (id) => document.getElementById(id);
+
+/** Show the blank color-blocked background and spinner while weather loads (R16). */
+export function showMainLoading() {
+  $('screen-main').dataset.condition = 'loading';
+  $('main-loading').hidden = false;
+  $('main-content').hidden = true;
+  $('main-error').hidden = true;
+  $('main-effect').className = 'effect';
+}
+
+/** Show a plain message instead of the character (Checkpoint 6 replaces this with the drawn error states). */
+export function showMainError(message) {
+  $('screen-main').dataset.condition = 'loading';
+  $('main-loading').hidden = true;
+  $('main-content').hidden = true;
+  $('main-error').hidden = false;
+  $('main-error-text').textContent = message;
+  $('main-effect').className = 'effect';
+}
+
+/** Render one recommendation state. `today` is the location's current date, for the Today/forecast label. */
+export function renderMain(state, today) {
+  $('screen-main').dataset.condition = state.condition.toLowerCase();
+  $('main-loading').hidden = true;
+  $('main-error').hidden = true;
+  $('main-content').hidden = false;
+
+  $('main-date').textContent = dateLabel(state.date, today);
+  $('main-location').textContent = state.location;
+
+  $('main-condition-icon').className = `icon icon--${CONDITION_ICON[state.condition]}`;
+  $('main-condition-text').textContent = state.condition;
+  $('main-range').textContent = `Feels like ${temperatureRangeText(state.temperatureRangeF)}`;
+
+  $('main-recommendation').textContent = recommendationText(state);
+
+  const reminders = $('main-reminders');
+  reminders.replaceChildren(...state.reminders.map((reminder) => {
+    const item = document.createElement('li');
+    const icon = document.createElement('span');
+    icon.className = `icon icon--${REMINDER_ICON[reminder]}`;
+    icon.setAttribute('aria-hidden', 'true');
+    const text = document.createElement('span');
+    text.textContent = reminderText(reminder, state.reminderVariants[reminder]);
+    item.append(icon, text);
+    return item;
+  }));
+
+  const character = $('main-character');
+  character.src = `assets/outfits/${state.temperatureBand.toLowerCase()}-${state.outfitVariant}.svg`;
+  character.alt = `Character dressed for ${state.temperatureBand.toLowerCase()} weather`;
+
+  // Effect layers over the whole scene, never the character itself; Clear has none.
+  $('main-effect').className = state.condition === 'Clear' ? 'effect' : `effect effect--${EFFECT[state.condition]}`;
+}
+
+const EFFECT = { Rainy: 'rain', Snowy: 'snow', Windy: 'wind' };

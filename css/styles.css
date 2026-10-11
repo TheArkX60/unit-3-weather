@@ -1,5 +1,7 @@
 /* Checkpoint 1: minimal shell. Color-blocked layout comes in Checkpoint 4. */
 body { margin: 0; font-family: system-ui, sans-serif; }
+/* Layout rules like display:grid must not override the hidden attribute. */
+[hidden] { display: none !important; }
 .screen { padding: 1rem; }
 .screen[hidden] { display: none; }
 .dev-nav { padding: 1rem; }
@@ -82,4 +84,89 @@ body { margin: 0; font-family: system-ui, sans-serif; }
 @media (prefers-reduced-motion: reduce) {
   .effect { animation: none; }
   .spinner { animation-duration: 3s; }
+}
+
+/* ---- Main screen ---- */
+.main {
+  --bg: #3a6786;
+  --fg: #fff;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+/* One background per condition; each keeps white text above 4.5:1 (R22). */
+.main[data-condition='clear'] { --bg: #a94a00; }
+.main[data-condition='rainy'] { --bg: #2f5f8f; }
+.main[data-condition='snowy'] { --bg: #3a6786; }
+.main[data-condition='windy'] { --bg: #2a6f63; }
+.main[data-condition='loading'] { --bg: #3a6786; }
+
+.main__loading { min-height: 100dvh; display: grid; place-items: center; }
+.main__error { margin: 0; padding: 2rem 1rem; font-size: 1.25rem; }
+.main__error a, .main__bar a { color: inherit; }
+
+/* Phone: summary on top, character fills the lower area, controls anchored at the bottom for the thumb. */
+.main__content {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  gap: 1rem;
+}
+.main__summary p { margin: 0; }
+.main__condition { font-size: 1.5rem; font-weight: 600; }
+.main__range { font-size: 2.25rem; font-weight: 700; margin-top: .25rem; }
+.main__credit { font-size: .8rem; margin-top: .25rem; }
+.main__recommendation { font-size: 1.35rem; margin-top: 1rem !important; }
+.main__reminders { list-style: none; margin: .75rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+.main__reminders li {
+  display: flex; align-items: center; gap: .4rem;
+  min-height: 44px; padding: 0 .9rem;
+  background: #fff; color: #1d1d1d; border-radius: 999px; font-weight: 600;
+}
+.main__character { display: flex; align-items: flex-end; justify-content: center; min-height: 0; }
+.main__character img { height: min(48dvh, 440px); max-width: 100%; width: auto; }
+.main__bar { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
+.main__bar a {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 48px; min-width: 48px; padding: 0 1rem;
+  background: rgba(0, 0, 0, 0.3); border-radius: 999px; font-size: 1.1rem; font-weight: 600; text-decoration: none;
+}
+.main__bar a:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+/* Laptop: text column beside a large character, rather than a scaled-up phone layout (R20). */
+@media (min-width: 900px) {
+  .main__content {
+    grid-template-columns: minmax(320px, 1fr) minmax(320px, 1fr);
+    grid-template-rows: 1fr auto;
+    grid-template-areas: 'summary character' 'bar character';
+    padding: 3rem 4rem;
+    gap: 2rem 4rem;
+  }
+  .main__summary { grid-area: summary; align-self: end; max-width: 34rem; }
+  .main__bar { grid-area: bar; justify-content: flex-start; align-self: start; }
+  .main__character { grid-area: character; align-items: center; }
+  .main__character img { height: min(80dvh, 720px); }
+  .main__condition { font-size: 2rem; }
+  .main__range { font-size: 3.5rem; }
+  .main__recommendation { font-size: 1.75rem; }
+}
+
+/* Text and controls sit above the weather effect so it never hides them; the shadow keeps
+   white text readable where an effect line passes behind it. */
+.effect { z-index: 1; }
+.main__summary, .main__bar, .main__error { position: relative; z-index: 2; }
+/* Dark scrim behind text and buttons. At 55% black, white text stays above 4.5:1 even where a white
+   effect line passes directly behind a word (worst case 5.3:1 across all four backgrounds and effects). */
+.main__summary, .main__error {
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+}
+.main__bar a { background: rgba(0, 0, 0, 0.55); }
+@media (min-width: 900px) {
+  .main__summary { padding: 1.5rem 2rem; }
 }

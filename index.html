@@ -8,9 +8,35 @@
 </head>
 <body>
   <main id="app">
-    <section id="screen-main" class="screen" hidden>
-      <h1>Main screen</h1>
-      <pre id="main-debug">Placeholder</pre>
+    <section id="screen-main" class="screen scene main" data-condition="loading" hidden>
+      <h1 class="visually-hidden">What to wear</h1>
+      <div id="main-loading" class="main__loading">
+        <div class="spinner" role="status"><span class="visually-hidden">Loading weather</span></div>
+      </div>
+      <p id="main-error" class="main__error" role="alert" hidden>
+        <span id="main-error-text"></span> <a href="#location">Change location</a>
+      </p>
+      <div id="main-content" class="main__content" hidden>
+        <div class="main__summary">
+          <p class="main__condition">
+            <span id="main-condition-icon" class="icon" aria-hidden="true"></span>
+            <span id="main-condition-text"></span>
+          </p>
+          <p id="main-range" class="main__range"></p>
+          <p class="main__credit">Open-Meteo</p>
+          <p id="main-recommendation" class="main__recommendation"></p>
+          <ul id="main-reminders" class="main__reminders"></ul>
+        </div>
+        <div class="main__character">
+          <img id="main-character" src="" alt="">
+        </div>
+        <nav class="main__bar" aria-label="Change what you're viewing">
+          <a id="main-date" href="#dates"></a>
+          <a id="main-location" href="#location"></a>
+          <a id="main-info" href="#info">About</a>
+        </nav>
+      </div>
+      <div id="main-effect" class="effect" aria-hidden="true"></div>
     </section>
     <section id="screen-dates" class="screen" hidden><h1>Date picker</h1><p>Placeholder</p></section>
     <section id="screen-trip" class="screen" hidden><h1>Trip overview</h1><p>Placeholder</p></section>

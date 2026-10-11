@@ -11,6 +11,7 @@
 <script type="module">
   import { conditionFor, temperatureBandFor, remindersFor, buildState, dayFromForecast } from './js/state.js';
   import { resolveVariants } from './js/variants.js';
+  import { recommendationText, reminderText, dateLabel, temperatureRangeText } from './js/text.js';
   import { saveLocation, loadLocation, clearLocation, labelFor, fromMatch } from './js/location.js';
 
   const out = document.getElementById('out');
@@ -60,6 +61,8 @@
   check('umbrella at 30%', remindersFor(day({ precipChancePct: 30 })), ['umbrella']);
   check('sunscreen at UV 3', remindersFor(day({ uvMax: 3 })), ['sunscreen']);
   check('no sunscreen at UV 2.9', remindersFor(day({ uvMax: 2.9 })), []);
+  check('sunscreen + umbrella on a mixed day (59% rain, UV 5)', remindersFor(day({ precipChancePct: 59, uvMax: 5 })), ['umbrella', 'sunscreen']);
+  check('sunscreen hidden at 60% rain', remindersFor(day({ precipChancePct: 60, uvMax: 8 })), ['umbrella']);
   check('hydration at apparent max 90', remindersFor(day({ apparentMax: 90 })), ['hydration']);
   check('all three at once', remindersFor(day({ precipChancePct: 40, uvMax: 8, apparentMax: 95 })), ['umbrella', 'sunscreen', 'hydration']);
 
@@ -134,6 +137,20 @@
   check('corrupt saved location -> null', loadLocation({ getItem: () => '{oops' }), null);
   check('incomplete saved location -> null', loadLocation({ getItem: () => '{"name":"x"}' }), null);
   check('throwing storage -> null', loadLocation({ getItem() { throw new Error('blocked'); } }), null);
+
+  // Wording (js/text.js)
+  const st = (o) => ({ temperatureBand: 'Mild', condition: 'Clear', ...o });
+  check('Clear: band line only', recommendationText(st({})), "It's mild. A tee and pants are fine.");
+  check('Rainy: band + umbrella line', recommendationText(st({ temperatureBand: 'Cool', condition: 'Rainy' })),
+    "It's cool. Wear long sleeves. It's rainy. Bring an umbrella.");
+  check('every band x condition yields text', ['Hot', 'Warm', 'Mild', 'Cool', 'Cold'].every((b) =>
+    ['Clear', 'Rainy', 'Snowy', 'Windy'].every((c) => recommendationText(st({ temperatureBand: b, condition: c })).length > 10)), true);
+  check('3 wordings per reminder, all different', ['umbrella', 'sunscreen', 'hydration'].every((r) =>
+    new Set([1, 2, 3].map((v) => reminderText(r, v))).size === 3), true);
+  check('reminder variant 2 picks the second wording', reminderText('umbrella', 2), "Don't forget your umbrella.");
+  check('dateLabel today', dateLabel('2026-10-11', '2026-10-11'), 'Today');
+  check('dateLabel forecast day', dateLabel('2026-10-13', '2026-10-11'), 'Tue, Oct 13');
+  check('temperature range text', temperatureRangeText([72, 91]), '72–91°F');
 
   out.insertAdjacentHTML('beforeend', `\n<b>${failures === 0 ? 'ALL TESTS PASSED' : failures + ' FAILED'}</b>\n`);
   document.title = failures === 0 ? 'PASS' : 'FAIL';
