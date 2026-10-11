@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Icons, effects, spinner (temporary review page)</title>
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  body { padding: 1rem; background: #fdf3e3; }
+  h2 { margin: 1.5rem 0 .5rem; }
+  .row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-start; }
+  .chip { background: #fff; border-radius: 8px; padding: .5rem .75rem; display: flex; align-items: center; gap: .5rem; font-size: 1.1rem; }
+  .panel { width: 220px; height: 330px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; color: #fff; }
+  .panel img { width: 150px; margin-bottom: 1rem; }
+  .panel figcaption { position: absolute; top: .5rem; left: .75rem; font-weight: 600; }
+  .spin-panel { width: 220px; height: 150px; border-radius: 12px; background: #2b6f8f; color: #fff; display: grid; place-items: center; }
+</style>
+</head>
+<body>
+<h1>Icons, effects, spinner</h1>
+
+<h2>Icons (6 files, shown with the labels they'll sit beside)</h2>
+<div class="row">
+  <div class="chip"><span class="icon icon--sunny" aria-hidden="true"></span> Clear / Sunscreen</div>
+  <div class="chip"><span class="icon icon--rainy" aria-hidden="true"></span> Rainy</div>
+  <div class="chip"><span class="icon icon--snowing" aria-hidden="true"></span> Snowy</div>
+  <div class="chip"><span class="icon icon--air" aria-hidden="true"></span> Windy</div>
+  <div class="chip"><span class="icon icon--umbrella" aria-hidden="true"></span> Umbrella</div>
+  <div class="chip"><span class="icon icon--water-drop" aria-hidden="true"></span> Hydration</div>
+</div>
+
+<h2>Effects over the whole scene (character sits under the effect)</h2>
+<div class="row">
+  <figure class="scene panel" style="background:#3f7fb5;margin:0">
+    <figcaption>Rain</figcaption>
+    <img src="assets/outfits/mild-1.svg" alt="">
+    <div class="effect effect--rain" aria-hidden="true"></div>
+  </figure>
+  <figure class="scene panel" style="background:#6a8fb0;margin:0">
+    <figcaption>Snow</figcaption>
+    <img src="assets/outfits/cold-1.svg" alt="">
+    <div class="effect effect--snow" aria-hidden="true"></div>
+  </figure>
+  <figure class="scene panel" style="background:#4a9a8a;margin:0">
+    <figcaption>Wind</figcaption>
+    <img src="assets/outfits/cool-1.svg" alt="">
+    <div class="effect effect--wind" aria-hidden="true"></div>
+  </figure>
+  <figure class="scene panel" style="background:#e0a030;margin:0">
+    <figcaption>Clear (no effect)</figcaption>
+    <img src="assets/outfits/hot-1.svg" alt="">
+  </figure>
+</div>
+
+<h2>Loading spinner</h2>
+<div class="row">
+  <div class="spin-panel"><div class="spinner" role="status"><span class="visually-hidden">Loading weather</span></div></div>
+</div>
+</body>
+</html>

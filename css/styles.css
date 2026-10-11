@@ -4,3 +4,82 @@ body { margin: 0; font-family: system-ui, sans-serif; }
 .screen[hidden] { display: none; }
 .dev-nav { padding: 1rem; }
 .dev-nav a { display: inline-block; min-width: 24px; min-height: 24px; margin-right: .5rem; }
+
+/* ---- Icons: Material Symbols drawn as masks so they take the surrounding text color ---- */
+.icon {
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: middle;
+  background-color: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+.icon--sunny { --icon: url(../assets/icons/sunny.svg); }
+.icon--rainy { --icon: url(../assets/icons/rainy.svg); }
+.icon--snowing { --icon: url(../assets/icons/snowing.svg); }
+.icon--air { --icon: url(../assets/icons/air.svg); }
+.icon--umbrella { --icon: url(../assets/icons/umbrella.svg); }
+.icon--water-drop { --icon: url(../assets/icons/water_drop.svg); }
+
+/* ---- Atmospheric effects: decorative tiling layers laid over the whole scene ---- */
+.scene { position: relative; overflow: hidden; }
+.effect {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-repeat: repeat;
+}
+/* Each layer scrolls by exactly its tile size per loop, so the animation repeats seamlessly. */
+.effect--rain {
+  background-image: url(../assets/effects/rain.svg), url(../assets/effects/rain.svg);
+  background-size: 100px 140px, 60px 84px;
+  animation: rain-fall 0.8s linear infinite;
+}
+@keyframes rain-fall {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 0 140px, 0 84px; }
+}
+.effect--snow {
+  background-image: url(../assets/effects/snow.svg), url(../assets/effects/snow.svg);
+  background-size: 100px 100px, 160px 160px;
+  animation: snow-fall 6s linear infinite;
+}
+@keyframes snow-fall {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 0 100px, 0 160px; }
+}
+.effect--wind {
+  background-image: url(../assets/effects/wind.svg);
+  background-size: 240px 120px;
+  animation: wind-blow 3s linear infinite;
+}
+@keyframes wind-blow {
+  from { background-position: 0 0; }
+  to { background-position: 240px 0; }
+}
+
+/* ---- Loading spinner ---- */
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 6px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Reduced motion: weather effects freeze as a static pattern; the spinner turns slowly so loading is still visible. */
+@media (prefers-reduced-motion: reduce) {
+  .effect { animation: none; }
+  .spinner { animation-duration: 3s; }
+}
