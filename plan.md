@@ -147,8 +147,8 @@ Evidence status as of 2026-10-11. **Verified** means a check was run and recorde
 | R22 | 4.5:1 text, 3:1 large text/icons on each background | Automated WCAG formula incl. worst case behind effects, 0 failures (CP7) | Verified | optionally spot-check one background in DevTools' contrast picker |
 | R23 | Screen reader announces text with each icon | Developer, Windows Narrator (CP7); automated pairing check | Verified | none |
 | R24 | Grayscale view still conveys active reminders | Developer, Achromatopsia emulation (CP7) | Verified | none |
-| R25 | No account UI; no analytics script | Static site, no such code written | Open | view page source and Network tab on live: only GitHub Pages files and Open-Meteo requests |
-| R26 | localStorage holds only location and variant numbers; location sent only to Open-Meteo | Code reviewed; not inspected | Open | DevTools, Application, Local Storage: keys should be `location` and `variants:<date>` only; Network tab: location goes only to Open-Meteo |
+| R25 | No account UI; no analytics script | Agent static scan of the deployed `index.html` and all JS/CSS (2026-10-11): one script (`js/main.js`), no off-site resources loaded, no login UI | Agent-verified; Developer to confirm | optional: glance at the live Network tab (only GitHub Pages files and Open-Meteo) |
+| R26 | localStorage holds only location and variant numbers; location sent only to Open-Meteo | Agent code scan (2026-10-11): the only storage keys are `location` and `variants:<date>`; the only network calls are to `api.open-meteo.com` and `geocoding-api.open-meteo.com` | Partly verified | Developer: DevTools, Application, Local Storage on the live site: keys should be `location` and `variants:<date>` only |
 | R27 | Open-Meteo 90-day logging disclosed | Developer reviewed About (CP6) | Verified | none |
 | R28 | Art credits and licenses listed | Developer reviewed About (CP6) | Verified | none |
 | R29 | Public HTTPS URL loads the working app, no build | Developer, laptop and phone (CP8); Agent confirmed build and 200s | Verified | none |
