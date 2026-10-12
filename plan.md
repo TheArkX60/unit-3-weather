@@ -54,8 +54,8 @@ During implementation, follow the approved plan in working checkpoints and keep 
 ### Build
 
 - [x] Create or source the assets listed in `spec.md`, starting early: 15 complete outfit images from nonemo's pack (3 × 5 temperature bands), 6 Material Symbols icons, 3 custom atmospheric effects, 1 spinner
-- [ ] Use the approved screen drawings to guide layout and interaction work
-- [ ] Keep one recommendation state driving every visual and written output
+- [x] Use the approved screen drawings to guide layout and interaction work
+- [x] Keep one recommendation state driving every visual and written output
 
 **Checkpoint 1 — static shell and weather data**
 - [x] Static project scaffold (`index.html`, CSS, `js/` structure) with placeholder screens, committed and openable locally with no build step
@@ -96,12 +96,12 @@ During implementation, follow the approved plan in working checkpoints and keep 
 **Checkpoint 8 — deploy**
 - [x] Deployed to GitHub Pages at a public HTTPS URL, loading with no build step required by the visitor (R29)
 
-- [ ] Test and fix each checkpoint against the specification before starting the next
+- [x] Test and fix each checkpoint against the specification before starting the next
 - [x] Commit meaningful working checkpoints
 
 ### Verify and revise
 
-- [ ] Check every specification requirement
+- [x] Check every specification requirement
 - [x] Test multiple locations, current and forecast dates, recommendation categories, outfit and reminder variations, and failure states
 - [x] Verify that eligible outfit and reminder variations are selected independently rather than as fixed pairs
 - [x] Verify that returning to a previously selected date shows the same variations
@@ -147,7 +147,7 @@ Evidence status as of 2026-10-11. **Verified** means a check was run and recorde
 | R22 | 4.5:1 text, 3:1 large text/icons on each background | Automated WCAG formula incl. worst case behind effects, 0 failures (CP7) | Verified | optionally spot-check one background in DevTools' contrast picker |
 | R23 | Screen reader announces text with each icon | Developer, Windows Narrator (CP7); automated pairing check | Verified | none |
 | R24 | Grayscale view still conveys active reminders | Developer, Achromatopsia emulation (CP7) | Verified | none |
-| R25 | No account UI; no analytics script | Agent static scan of the deployed `index.html` and all JS/CSS (2026-10-11): one script (`js/main.js`), no off-site resources loaded, no login UI | Agent-verified; Developer to confirm | optional: glance at the live Network tab (only GitHub Pages files and Open-Meteo) |
+| R25 | No account UI; no analytics script | Agent static scan of the deployed `index.html` and all JS/CSS (2026-10-11): one script (`js/main.js`), no off-site resources loaded, no login UI | Verified (Agent static scan; Developer accepted it, 2026-10-11) | none |
 | R26 | localStorage holds only location and variant numbers; location sent only to Open-Meteo | Agent code scan (2026-10-11): the only storage keys are `location` and `variants:<date>`; the only network calls are to `api.open-meteo.com` and `geocoding-api.open-meteo.com` | Verified | none (Developer saw only the `location` and `variants:<date>` keys in DevTools on the live site, 2026-10-11) |
 | R27 | Open-Meteo 90-day logging disclosed | Developer reviewed About (CP6) | Verified | none |
 | R28 | Art credits and licenses listed | Developer reviewed About (CP6) | Verified | none |
@@ -187,6 +187,7 @@ Record material plan changes and why they were made.
 - **2026-10-11 — Cloudy condition added (found while verifying R11).** The Developer chose to fix "overcast shown as Clear" now. Added a fifth condition, Cloudy (average cloud cover 60% or more, from Open-Meteo `cloud_cover_mean`), between Windy and Clear, with a gray-blue background, the Material Symbols `cloud` icon, no atmospheric effect, and no extra recommendation sentence. Changed `js/weather.js`, `js/state.js`, `js/text.js`, `js/screens/main.js`, `css/styles.css`, the About rules text, `assets/icons/`, and the tests (7 new checks; all pass). Developer verified on localhost that Cloudy shows for the cloudy days. Not yet pushed to the live site.
 - **2026-10-11 — Sunscreen wording 3 changed** from "The sun's out, so sunscreen up." to "UV is high, so sunscreen up." The old line was wrong on Cloudy and Rainy days where the UV index still triggers the reminder. Developer approved.
 - **2026-10-11 — Requirement verification mostly closed.** Developer ran the open checks on the live site (R5, R6, R11, R16, R18, R26, and three extra locations); all passed. The table now has one row not yet confirmed by the Developer (R25, Agent static scan only). Observation for the improvement shortlist: an umbrella reminder appears on Snowy days (Fairbanks Oct 11) because the rule is precipitation chance of 30% or more, whatever its form.
+- **2026-10-11 — Developer ticked the build checklist and "Check every specification requirement".** The drawings guided the layout, with the recorded deviations (laptop side-by-side, phone bottom bar, Cloudy added). R25 rests on the Agent's static scan of the deployed files, which the Developer accepted. Left open: repeating the accessibility checks on the deployed URL (Narrator and grayscale were run on the local build of the same code).
 
 ## Saving transcripts
 
