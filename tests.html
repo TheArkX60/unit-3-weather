@@ -12,7 +12,7 @@
 <script type="module">
   import { conditionFor, temperatureBandFor, remindersFor, buildState, dayFromForecast } from './js/state.js';
   import { resolveVariants } from './js/variants.js';
-  import { toggleDate, tripDatesFromHash } from './js/selection.js';
+  import { toggleDate, tripDatesFromHash, isListHash } from './js/selection.js';
   import { summaryFor } from './js/state.js';
   import { recommendationText, reminderText, dateLabel, temperatureRangeText } from './js/text.js';
   import { saveLocation, loadLocation, clearLocation, labelFor, fromMatch } from './js/location.js';
@@ -182,6 +182,11 @@
   check('trip hash: duplicates collapsed', tripDatesFromHash('2026-10-12,2026-10-12', valid), ['2026-10-12']);
   check('trip hash: empty', tripDatesFromHash(undefined, valid), []);
   check('3 selected days -> exactly 3 trip dates', tripDatesFromHash('2026-10-11,2026-10-12,2026-10-13', valid).length, 3);
+  check('isListHash: date picker', isListHash('#dates'), true);
+  check('isListHash: trip overview', isListHash('#trip/2026-10-12,2026-10-13'), true);
+  check('isListHash: a day is not a list', isListHash('#main/2026-10-12'), false);
+  check('isListHash: location and empty', [isListHash('#location'), isListHash('')], [false, false]);
+  check('isListHash: lookalike names rejected', isListHash('#datesx'), false);
   check('summaryFor', summaryFor(day({ precipChancePct: 40, apparentMin: 45, apparentMax: 51 })),
     { condition: 'Rainy', temperatureBand: 'Cool', temperatureRangeF: [45, 51] });
   // Summaries must not roll variants for days the user has not opened

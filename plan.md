@@ -107,8 +107,10 @@ During implementation, follow the approved plan in working checkpoints and keep 
 - [x] Verify that returning to a previously selected date shows the same variations
 - [ ] Test the deployed app, independently of the local version, on a real phone and a laptop, including both screens, accessibility, and one-handed controls
 - [x] Prepare the usability test below
-- [ ] Test with three peers and record each session
-- [ ] Add the chosen improvement to this checklist, and update `spec.md` if the intended result changes
+- [x] Test with three peers and record each session (tested with three peers; none could or would be screen-recorded, so only the written notes exist)
+- [x] Add the chosen improvement to this checklist, and update `spec.md` if the intended result changes
+  - [ ] Improvement 1: Back control from a specific day to the date picker or trip overview (R30)
+  - [ ] Improvement 2, if time permits: location search accepts "City ST" and "City State" and no longer returns a wrong-state place
 - [ ] Implement, verify, and redeploy at least one meaningful revision
 
 ### Deliver
@@ -242,10 +244,22 @@ Three peers tested the live app. None wanted to be named, and none could or woul
 
 ### Findings and chosen improvement
 
-To be written after all three sessions: the strongest findings (with how many of the three peers showed each one), the improvement they support, and the revision made and verified.
+Counts are as the Developer reported them: all three testers raised the same items, except that Tester B did not mention "Feels like". The Agent's interpretations are marked.
 
-**Known observations from the build, kept separate from test evidence** (so they do not bias the sessions): an umbrella reminder appears on Snowy days because the rule is a 30% or higher chance of any precipitation; the long-press needed to start a trip on touch devices is only explained by a small hint on the date picker.
+| # | Finding | Testers | Supporting evidence |
+|---|---|---|---|
+| 1 | No way to go back from a specific day's weather screen | 3 of 3 | Tester request in the closing answers |
+| 2 | Location search: "Austin TX" fails, "Austin, TX" works | 3 of 3 | Agent reproduced it against Open-Meteo's search on 2026-10-12: "Austin TX", "Austin Texas" and "Dallas TX" returned no matches; "Austin, TX" returned Austin, Texas. "Springfield MO" returned Wilbraham, Massachusetts (a wrong place) |
+| 3 | Trip plans do not save | 3 of 3 | Testers' report. Agent interpretation: the trip overview is rebuilt from its address, so returning to it works, but with no Back control from a day there is no way to return to it; finding 1 is the likely cause |
+| 4 | "Feels like" beside a wide range ("Feels like 77-95F") feels odd | 2 of 3 (A and C) | Tester comment; they suggested removing the label or leaving it. Agent interpretation: the numbers are the day's feels-like low and high, so the label is accurate; removing it would make the numbers less clear |
 
+**Strongest finding:** 1 (all three, and it likely explains 3).
+
+**Chosen improvement 1: Back control from a specific day** (supports findings 1 and 3). Spec change: new requirement R30.
+**Chosen improvement 2, if time permits: location search accepts "City ST" and "City State"** and no longer returns a wrong-state place (supports finding 2).
+**Not changed:** the "Feels like" label (finding 4) stays unless the Developer decides otherwise.
+
+**Known observations from the build, kept separate from test evidence:** an umbrella reminder appears on Snowy days because the rule is a 30% or higher chance of any precipitation; the long-press needed to start a trip on touch devices is only explained by a small hint on the date picker.
 
 ## Revisions
 
@@ -268,6 +282,7 @@ Record material plan changes and why they were made.
 - **2026-10-11 — Requirement verification mostly closed.** Developer ran the open checks on the live site (R5, R6, R11, R16, R18, R26, and three extra locations); all passed. The table now has one row not yet confirmed by the Developer (R25, Agent static scan only). Observation for the improvement shortlist: an umbrella reminder appears on Snowy days (Fairbanks Oct 11) because the rule is precipitation chance of 30% or more, whatever its form.
 - **2026-10-11 — Developer ticked the build checklist and "Check every specification requirement".** The drawings guided the layout, with the recorded deviations (laptop side-by-side, phone bottom bar, Cloudy added). R25 rests on the Agent's static scan of the deployed files, which the Developer accepted. Left open: repeating the accessibility checks on the deployed URL (Narrator and grayscale were run on the local build of the same code).
 - **2026-10-11 — Usability test prepared and approved by the Developer.** Purpose, five tasks, neutral prompts, and the session note format are in the Usability testing section. Sessions run against the live app, which includes the Cloudy condition as of commit `3325ac9`.
+- **2026-10-12 — Usability testing done; improvements chosen.** Three peers (A laptop, B phone, C laptop) completed all five tasks. Findings and counts are in the Usability testing section. The Developer chose the Back control first and the location-search fix second if time permits. Added requirement R30 to `spec.md`.
 
 ## Saving transcripts
 

@@ -6,8 +6,8 @@ import { loadLocation, saveLocation } from './location.js';
 import { initLocationScreen } from './screens/location.js';
 import { initDatesScreen, renderDates } from './screens/dates.js';
 import { renderTrip } from './screens/trip.js';
-import { tripDatesFromHash } from './selection.js';
-import { renderMain, showMainLoading } from './screens/main.js';
+import { isListHash, tripDatesFromHash } from './selection.js';
+import { initMainScreen, renderMain, setBackVisible, showMainLoading } from './screens/main.js';
 import { initInfoScreen, resetInfoScreen } from './screens/info.js';
 import { initErrorScreen, renderError } from './screens/error.js';
 
@@ -17,6 +17,9 @@ const SCREENS = ['main', 'dates', 'trip', 'info', 'location', 'error'];
 let cachedForecast = null;
 // Where "Try again" on the weather-unavailable screen should go back to.
 let retryHash = '#main';
+// Route we were on before the current one, and whether Back from a day can simply step back in history.
+let lastHash = '';
+let backViaHistory = false;
 
 async function forecastFor(saved) {
   const key = `${saved.latitude},${saved.longitude}`;
@@ -34,6 +37,8 @@ function showError(kind, detail = '', from = '#main') {
 }
 
 function route() {
+  const previousHash = lastHash;
+  lastHash = location.hash;
   const [name, arg] = location.hash.slice(1).split('/');
   const screen = SCREENS.includes(name) ? name : 'main';
   if (['main', 'dates', 'trip'].includes(screen) && !loadLocation()) {
@@ -43,7 +48,12 @@ function route() {
   for (const id of SCREENS) {
     document.getElementById(`screen-${id}`).hidden = id !== screen;
   }
-  if (screen === 'main') showMain(arg);
+  if (screen === 'main') {
+    // A day opened by date came from the date picker or a trip overview, so offer a way back to it (R30).
+    backViaHistory = isListHash(previousHash);
+    setBackVisible(Boolean(arg));
+    showMain(arg);
+  }
   if (screen === 'info') resetInfoScreen();
   if (screen === 'location') {
     document.getElementById('location-back').hidden = !loadLocation(); // nothing to go back to on first visit
@@ -95,6 +105,10 @@ function selectLocation(chosen) {
 
 initLocationScreen({ onSelect: selectLocation, onError: (kind, detail) => showError(kind, detail) });
 initInfoScreen();
+initMainScreen({
+  // Step back in history when we came from a list (restores the same trip); otherwise go to the date picker.
+  onBack: () => { if (backViaHistory) history.back(); else location.hash = '#dates'; },
+});
 initErrorScreen({
   onRetry: () => {
     cachedForecast = null;

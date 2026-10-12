@@ -6,6 +6,19 @@ import {
 
 const $ = (id) => document.getElementById(id);
 
+/** Wire the Back control once. `onBack()` decides where it goes. */
+export function initMainScreen({ onBack }) {
+  $('main-back').addEventListener('click', (event) => {
+    event.preventDefault();
+    onBack();
+  });
+}
+
+/** Show Back only when a specific day was opened from the date picker or a trip overview (R30). */
+export function setBackVisible(visible) {
+  $('main-back').hidden = !visible;
+}
+
 /** Show the blank color-blocked background and spinner while weather loads (R16). */
 export function showMainLoading() {
   $('screen-main').dataset.condition = 'loading';

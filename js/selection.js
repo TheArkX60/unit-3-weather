@@ -6,6 +6,11 @@ export function toggleDate(selected, date) {
   return next.sort();
 }
 
+/** True when a route hash is the date picker or a trip overview (the screens a chosen day can be opened from). */
+export function isListHash(hash) {
+  return /^#(dates|trip)(\/|$)/.test(hash);
+}
+
 /** Trip dates from a route argument like "2026-10-12,2026-10-14", keeping only dates inside the forecast (R6). */
 export function tripDatesFromHash(arg, validDates) {
   if (!arg) return [];
