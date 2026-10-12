@@ -106,7 +106,7 @@ During implementation, follow the approved plan in working checkpoints and keep 
 - [x] Verify that eligible outfit and reminder variations are selected independently rather than as fixed pairs
 - [x] Verify that returning to a previously selected date shows the same variations
 - [ ] Test the deployed app, independently of the local version, on a real phone and a laptop, including both screens, accessibility, and one-handed controls
-- [ ] Prepare the usability test below
+- [x] Prepare the usability test below
 - [ ] Test with three peers and record each session
 - [ ] Add the chosen improvement to this checklist, and update `spec.md` if the intended result changes
 - [ ] Implement, verify, and redeploy at least one meaningful revision
@@ -255,6 +255,7 @@ Record material plan changes and why they were made.
 - **2026-10-11 — Sunscreen wording 3 changed** from "The sun's out, so sunscreen up." to "UV is high, so sunscreen up." The old line was wrong on Cloudy and Rainy days where the UV index still triggers the reminder. Developer approved.
 - **2026-10-11 — Requirement verification mostly closed.** Developer ran the open checks on the live site (R5, R6, R11, R16, R18, R26, and three extra locations); all passed. The table now has one row not yet confirmed by the Developer (R25, Agent static scan only). Observation for the improvement shortlist: an umbrella reminder appears on Snowy days (Fairbanks Oct 11) because the rule is precipitation chance of 30% or more, whatever its form.
 - **2026-10-11 — Developer ticked the build checklist and "Check every specification requirement".** The drawings guided the layout, with the recorded deviations (laptop side-by-side, phone bottom bar, Cloudy added). R25 rests on the Agent's static scan of the deployed files, which the Developer accepted. Left open: repeating the accessibility checks on the deployed URL (Narrator and grayscale were run on the local build of the same code).
+- **2026-10-11 — Usability test prepared and approved by the Developer.** Purpose, five tasks, neutral prompts, and the session note format are in the Usability testing section. Sessions run against the live app, which includes the Cloudy condition as of commit `3325ac9`.
 
 ## Saving transcripts
 
