@@ -168,6 +168,73 @@ Evidence status as of 2026-10-11. **Verified** means a check was run and recorde
 
 Before testing, record the purpose, a few realistic tasks, non-leading prompts, and a consistent note format. For each session, use a non-identifying label and record the task, what the tester did or said, successes, barriers or questions, and possible changes. Keep observations separate from interpretations. After all three sessions, summarize the strongest findings and the improvement they support.
 
+### Test plan (draft for the Developer to edit and approve)
+
+**Purpose.** Find out whether a college-age person can, without any explanation, (1) see what to wear for today, (2) check another day or another city, (3) look at a multi-day trip, and (4) find out where the data comes from and how to clear what the app remembers. The aim is to find confusion and friction, not to rate the app.
+
+**Setup.**
+- Three peers, one session each, about 10 to 15 minutes. Peers are in or near the target group (US college students).
+- Use the live app (https://thearkx60.github.io/unit-3-weather/) on the peer's own phone if possible, otherwise a laptop. A first visit asks for a location, so the peer starts exactly as a new user would.
+- Record each session (screen and voice) only with the peer's permission. Do not write down names; use the labels Tester A, B, C.
+- Say the same opening to everyone: "I'm testing the app, not you. There are no wrong answers. Please think out loud as you go. I can't help during the tasks, but I'll take notes."
+
+**Tasks.** Read each one aloud as written. Do not name any button, screen, or feature, and do not hint at where to tap.
+
+| # | Task as read to the peer | What the Developer watches for (not said aloud) |
+|---|---|---|
+| 1 | "It's morning and you're getting ready to leave. Use the app to figure out what you'd wear today." | Reaches a location; reads the outfit, the sentence, and the reminders; says what they would do |
+| 2 | "You're meeting a friend the day after tomorrow. What will the weather be like then, and what would you wear?" | Finds the way to another day; notices the date label changing |
+| 3 | "Next week you're visiting a friend in Chicago. What should you expect there?" | Changes location by typing; picks a match; understands the result is for Chicago |
+| 4 | "You're going away for three days, starting the day after tomorrow. You'd like to see all three days together." | Finds and uses the multi-day feature; ends on the trip overview |
+| 5 | "Where does the weather information come from? And can you make the app forget where you are?" | Finds About; reads the source; finds the clear-saved-location control |
+
+**Prompts to use** (neutral; use only when it helps, and never explain the app):
+- "What are you thinking right now?"
+- "What did you expect to happen when you did that?"
+- "What does that part mean to you?" (pointing at an icon or word the peer paused on)
+- If a peer is stuck for about two minutes: "What would you try next?" If still stuck, note it as a barrier, give the smallest possible hint, and move on.
+
+**Closing questions** (after the tasks):
+1. "What was the easiest thing to do? What was the hardest?"
+2. "Was anything surprising or confusing?"
+3. "Would you use something like this in the morning? Why or why not?"
+4. "What would you change first?"
+
+**Note format** (copy one block per peer; keep observations and interpretations apart).
+
+```
+Tester: A / B / C        Device: phone / laptop        Recorded: yes / no        Date:
+Task 1  Did / said:                       Succeeded: yes / partly / no
+        Barriers or questions:
+        Possible change (interpretation):
+Task 2  ...
+Task 3  ...
+Task 4  ...
+Task 5  ...
+Closing answers (quote where possible):
+Other things noticed:
+```
+
+### Session records
+
+To be filled in by the Developer during testing. Do not add interpretations to the Observations lines.
+
+**Tester A**
+- (not yet run)
+
+**Tester B**
+- (not yet run)
+
+**Tester C**
+- (not yet run)
+
+### Findings and chosen improvement
+
+To be written after all three sessions: the strongest findings (with how many of the three peers showed each one), the improvement they support, and the revision made and verified.
+
+**Known observations from the build, kept separate from test evidence** (so they do not bias the sessions): an umbrella reminder appears on Snowy days because the rule is a 30% or higher chance of any precipitation; the long-press needed to start a trip on touch devices is only explained by a small hint on the date picker.
+
+
 ## Revisions
 
 Record material plan changes and why they were made.
