@@ -140,7 +140,7 @@ Evidence status as of 2026-10-11. **Verified** means a check was run and recorde
 | R15 | All five disclosures present and readable | Developer reviewed About (CP6) | Verified | none |
 | R16 | Spinner visible right after location/date change, gone after load | Developer on the live site with DevTools throttled to Slow 3G (2026-10-11): changing location showed the spinner on the blue background, then the weather. Switching days is instant because all 7 days are already downloaded, so no spinner is needed there | Verified (location change and fresh load) | optional: `spec.md` R16 could say "location change or fresh load" instead of "location/date change"; Developer has not yet decided |
 | R17 | Denying location shows the denied state | Screen checked via `#error/denied` (CP6); real denial on live phone (CP8) | Verified | none |
-| R18 | Failed request shows "weather unavailable" with retry | Screen seen via demo hook (CP6, hook now removed); real failure not yet tested | Open | DevTools Network: block request URL `api.open-meteo.com`, reload, confirm the screen; unblock, press Try again |
+| R18 | Failed request shows "weather unavailable" with retry | Developer on the live site (2026-10-11): with the browser set Offline, choosing device location showed "Weather unavailable"; Try again failed while offline and loaded the weather once back online | Verified | none |
 | R19 | Nonsense location shows "character not found" | Developer, `zzzzqq` (CP6) | Verified | none |
 | R20 | Resizing swaps layouts at a defined breakpoint, nothing broken | Developer at rest on phone and tablet/laptop sizes (CP7); no overflow at 899 and 900px | Verified | none |
 | R21 | All targets at least 24x24 px | Automated, 55 measurements, 0 failures (CP7) | Verified | none |
@@ -161,7 +161,7 @@ Evidence status as of 2026-10-11. **Verified** means a check was run and recorde
 | All recommendation categories | 4 conditions x 5 bands via preview; unit tests for thresholds | Verified | none |
 | Outfit and reminder variations chosen independently | Unit test: all 9 outfit x wording pairs occur over 300 dates | Verified | none |
 | Returning to a date shows the same variations | Unit test (50 reads); Developer revisited dates | Verified | none |
-| Failure states | Not found, denied checked; unavailable screen seen via hook | Open | covered by R18 and R17 above |
+| Failure states | Not found (R19), denied (R17), and unavailable with retry (R18) all verified | Verified | none |
 | Deployed app on a real phone and a laptop | Developer, one-handed use, both screens (CP8) | Verified | optionally repeat Narrator on the deployed laptop version |
 
 ## Usability testing
