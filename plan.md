@@ -217,16 +217,28 @@ Other things noticed:
 
 ### Session records
 
-To be filled in by the Developer during testing. Do not add interpretations to the Observations lines.
+Three peers tested the live app. None wanted to be named, and none could or would be screen-recorded, so there are no recordings (a deviation from the plan to record each session; the notes below are the only record). The Developer wrote the notes up as one combined summary, so per-tester detail was not kept beyond the device. Dates were not recorded.
 
-**Tester A**
-- (not yet run)
+| Tester | Device | Recorded |
+|---|---|---|
+| A | Laptop | No |
+| B | Phone | No |
+| C | Laptop | No |
 
-**Tester B**
-- (not yet run)
+**Tasks.** All three testers completed all five tasks (today's outfit; another day; Chicago next week; a three-day trip; data source and clearing the saved location).
 
-**Tester C**
-- (not yet run)
+**Observations** (what happened or was said):
+- Easiest: navigating from the main screen.
+- Hardest: understanding location and trips. Nothing was too hard to understand.
+- All three said they would use it because it is simple.
+- All three asked for a way to go back from a specific day's weather screen.
+- Typing "Austin TX" (no comma) did not work for location search; "Austin, TX" did.
+- Trip plans do not save.
+- "Feels like" next to a wide temperature range (for example "Feels like 77-95F") felt odd. The suggestion was to either remove "Feels like" or leave it alone.
+
+**Tester suggestions** (their own explanations, not confirmed): the trip not saving may be because there is no way to go back when viewing a specific day.
+
+**Interpretations by the Agent are in the Findings section below, not here.**
 
 ### Findings and chosen improvement
 
