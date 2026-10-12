@@ -138,7 +138,7 @@ Evidence status as of 2026-10-11. **Verified** means a check was run and recorde
 | R13 | Hold / left-click starts multi-select; taps add; OK confirms | Developer: mouse and phone mode (CP5), live phone (CP8) | Verified | none |
 | R14 | 3-day selection shows exactly 3 rows, each opens its day | Developer (CP5); unit test for 3 trip dates | Verified | none |
 | R15 | All five disclosures present and readable | Developer reviewed About (CP6) | Verified | none |
-| R16 | Spinner visible right after location/date change, gone after load | Spinner built and styled (CP4); never explicitly watched | Open | DevTools Network, throttle to Slow 3G, change date or location, confirm spinner then content |
+| R16 | Spinner visible right after location/date change, gone after load | Developer on the live site with DevTools throttled to Slow 3G (2026-10-11): changing location showed the spinner on the blue background, then the weather. Switching days is instant because all 7 days are already downloaded, so no spinner is needed there | Verified (location change and fresh load) | optional: `spec.md` R16 could say "location change or fresh load" instead of "location/date change"; Developer has not yet decided |
 | R17 | Denying location shows the denied state | Screen checked via `#error/denied` (CP6); real denial on live phone (CP8) | Verified | none |
 | R18 | Failed request shows "weather unavailable" with retry | Screen seen via demo hook (CP6, hook now removed); real failure not yet tested | Open | DevTools Network: block request URL `api.open-meteo.com`, reload, confirm the screen; unblock, press Try again |
 | R19 | Nonsense location shows "character not found" | Developer, `zzzzqq` (CP6) | Verified | none |
