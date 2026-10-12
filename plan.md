@@ -102,9 +102,9 @@ During implementation, follow the approved plan in working checkpoints and keep 
 ### Verify and revise
 
 - [ ] Check every specification requirement
-- [ ] Test multiple locations, current and forecast dates, recommendation categories, outfit and reminder variations, and failure states
-- [ ] Verify that eligible outfit and reminder variations are selected independently rather than as fixed pairs
-- [ ] Verify that returning to a previously selected date shows the same variations
+- [x] Test multiple locations, current and forecast dates, recommendation categories, outfit and reminder variations, and failure states
+- [x] Verify that eligible outfit and reminder variations are selected independently rather than as fixed pairs
+- [x] Verify that returning to a previously selected date shows the same variations
 - [ ] Test the deployed app, independently of the local version, on a real phone and a laptop, including both screens, accessibility, and one-handed controls
 - [ ] Prepare the usability test below
 - [ ] Test with three peers and record each session
@@ -157,7 +157,7 @@ Evidence status as of 2026-10-11. **Verified** means a check was run and recorde
 
 | Check | Evidence so far | Status | To close |
 |---|---|---|---|
-| Multiple locations, current and forecast dates | Austin and Dallas, device location | Open | try at least 3 more places on the live site, for example Fairbanks AK (cold or snow), Miami FL (hot, rain), Chicago IL (wind), and compare the outfit and condition to the actual forecast |
+| Multiple locations, current and forecast dates | Austin (all 7 days), Dallas, device location; Developer then checked Fairbanks AK (snow, Cold), Miami FL (Hot, rain, all reminders) and Chicago IL (rain, Cool, Cold) on the live site against expected values the Agent computed from Open-Meteo (2026-10-11): all matched | Verified | none; the Windy condition was not present in any of these places this week, so it has only been checked in the earlier preview and unit tests |
 | All recommendation categories | 4 conditions x 5 bands via preview; unit tests for thresholds | Verified | none |
 | Outfit and reminder variations chosen independently | Unit test: all 9 outfit x wording pairs occur over 300 dates | Verified | none |
 | Returning to a date shows the same variations | Unit test (50 reads); Developer revisited dates | Verified | none |
@@ -186,6 +186,7 @@ Record material plan changes and why they were made.
 - **2026-10-11 — Checkpoint 8 done: deployed to https://thearkx60.github.io/unit-3-weather/** (GitHub Pages, `master` branch root, HTTPS enforced; Developer approved the cleanup and publishing). Agent verified the Pages build and that every file returns 200 over HTTPS with correct content types. Developer then verified the live app on a laptop and a real phone: location search, device location, date picker, trip overview, About, persistence after reload, `tests.html` passing, and the location-denied path. Note: `a11y-check.html` was deleted at cleanup, so the automated checks were not re-run after the final main-screen CSS change (visually re-checked by the Developer on phone and tablet/laptop sizes); the page and its helper are recoverable from commit `a65eefe` if a re-run is wanted.
 - **2026-10-11 — Cloudy condition added (found while verifying R11).** The Developer chose to fix "overcast shown as Clear" now. Added a fifth condition, Cloudy (average cloud cover 60% or more, from Open-Meteo `cloud_cover_mean`), between Windy and Clear, with a gray-blue background, the Material Symbols `cloud` icon, no atmospheric effect, and no extra recommendation sentence. Changed `js/weather.js`, `js/state.js`, `js/text.js`, `js/screens/main.js`, `css/styles.css`, the About rules text, `assets/icons/`, and the tests (7 new checks; all pass). Developer verified on localhost that Cloudy shows for the cloudy days. Not yet pushed to the live site.
 - **2026-10-11 — Sunscreen wording 3 changed** from "The sun's out, so sunscreen up." to "UV is high, so sunscreen up." The old line was wrong on Cloudy and Rainy days where the UV index still triggers the reminder. Developer approved.
+- **2026-10-11 — Requirement verification mostly closed.** Developer ran the open checks on the live site (R5, R6, R11, R16, R18, R26, and three extra locations); all passed. The table now has one row not yet confirmed by the Developer (R25, Agent static scan only). Observation for the improvement shortlist: an umbrella reminder appears on Snowy days (Fairbanks Oct 11) because the rule is precipitation chance of 30% or more, whatever its form.
 
 ## Saving transcripts
 
