@@ -61,6 +61,17 @@ export function parseSearch(query) {
   return { city: cleaned, state: null };
 }
 
+/**
+ * Open-Meteo also matches alternate names, so "Austin" returns Ardmore, Tennessee (where Austin is an
+ * alias). When any result is named exactly what was typed, show only those; otherwise keep all results,
+ * for example a partial name that only matches by alias or prefix. (The geocoder does no typo matching.)
+ */
+export function preferExactName(results, city) {
+  const sameName = (a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }) === 0; // ignores case and accents
+  const exact = results.filter((result) => sameName(result.name, city));
+  return exact.length > 0 ? exact : results;
+}
+
 /** Keep only results in the named state (Open-Meteo's `admin1` is the full state name). */
 export function filterByState(results, stateName) {
   if (!stateName) return results;

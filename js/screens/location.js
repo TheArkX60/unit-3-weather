@@ -2,7 +2,7 @@
 // Distinct problems (no match, permission denied) are reported through `onError` to the error screen.
 import { geocode } from '../weather.js';
 import { fromMatch, labelFor, requestDeviceLocation } from '../location.js';
-import { filterByState, parseSearch } from '../search.js';
+import { filterByState, parseSearch, preferExactName } from '../search.js';
 
 // With a state typed we need a wide net to be sure to include it; without one a short list is enough.
 const COUNT_WITH_STATE = 100;
@@ -32,7 +32,7 @@ export function initLocationScreen({ onSelect, onError }) {
     try {
       const { city, state } = parseSearch(query);
       const found = await geocode(city, state ? COUNT_WITH_STATE : COUNT_WITHOUT_STATE);
-      const matches = filterByState(found, state).slice(0, MAX_SHOWN);
+      const matches = preferExactName(filterByState(found, state), city).slice(0, MAX_SHOWN);
       if (matches.length === 0) {
         setStatus('');
         onError('not-found', query);

@@ -13,7 +13,7 @@
   import { conditionFor, temperatureBandFor, remindersFor, buildState, dayFromForecast } from './js/state.js';
   import { resolveVariants } from './js/variants.js';
   import { toggleDate, tripDatesFromHash, isListHash } from './js/selection.js';
-  import { parseSearch, filterByState, lookupState } from './js/search.js';
+  import { parseSearch, filterByState, lookupState, preferExactName } from './js/search.js';
   import { summaryFor } from './js/state.js';
   import { recommendationText, reminderText, dateLabel, temperatureRangeText } from './js/text.js';
   import { saveLocation, loadLocation, clearLocation, labelFor, fromMatch } from './js/location.js';
@@ -234,6 +234,12 @@
   check('filterByState keeps only that state', filterByState(sample, 'Missouri').map((r) => r.name + '/' + r.admin1), ['Springfield/Missouri']);
   check('filterByState with no state keeps everything', filterByState(sample, null).length, 3);
   check('filterByState with no match is empty (-> "Character not found")', filterByState(sample, 'Texas'), []);
+  const fuzzy = [{ name: 'Austin', admin1: 'Texas' }, { name: 'Ardmore', admin1: 'Tennessee' }, { name: 'Austin', admin1: 'Minnesota' }, { name: 'Austin Park', admin1: 'Texas' }];
+  check('preferExactName drops alias and prefix matches (Ardmore, Austin Park)', preferExactName(fuzzy, 'Austin').map((r) => r.name + '/' + r.admin1), ['Austin/Texas', 'Austin/Minnesota']);
+  check('preferExactName ignores case', preferExactName(fuzzy, 'aUsTiN').length, 2);
+  check('preferExactName ignores accents', preferExactName([{ name: 'Cañon City' }, { name: 'Other' }], 'Canon City').length, 1);
+  check('preferExactName keeps all results when nothing matches exactly', preferExactName(fuzzy, 'Austn').length, 4);
+  check('preferExactName on no results', preferExactName([], 'Austin'), []);
 
   out.insertAdjacentHTML('beforeend', `\n<b>${failures === 0 ? 'ALL TESTS PASSED' : failures + ' FAILED'}</b>\n`);
   const summary = document.getElementById('summary');
