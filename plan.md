@@ -166,6 +166,39 @@ Evidence status as of 2026-10-11. **Verified** means a check was run and recorde
 | Failure states | Not found (R19), denied (R17), and unavailable with retry (R18) all verified | Verified | none |
 | Deployed app on a real phone and a laptop | Developer, one-handed use, both screens (CP8) | Verified | optionally repeat Narrator on the deployed laptop version |
 
+## Deliverables check
+
+Checked against `brief.md` on 2026-10-12. **Done** means the item exists in the repository or on the live site and was checked; **Open** needs the Developer.
+
+### Phase 1: research, specification, plan
+
+| # | Brief deliverable | Evidence | Status | To close |
+|---|---|---|---|---|
+| 1 | Approved `research.md` (context of use, user story, reference observations, weather and technical sources, decisions, art estimate) | Approved 2026-10-04; all listed sections present | Done | none |
+| 2 | 5-10 reference images in `reference/`, each with its **source** and observation in `research.md` | 5 images in `reference/`; `research.md` records an observation for each and names the app, but gives no source beyond that (where or when each screenshot was taken, or a link) | Open | Developer adds a one-line source for each of the 5 (for example "screenshot of the Apple Weather iOS app, taken <date>", or the store or page link) |
+| 3 | Approved `spec.md` (goal, requirements with acceptance checks, state, variation, assets, out of scope) | Approved 2026-10-04; every later change is a dated entry under Revisions | Done | none |
+| 4 | Hand-drawn phone and laptop designs for every proposed screen, in `reference/`, linked in `spec.md` | `App drawing.PNG` and `App drawing 2.jpg`, linked in `spec.md`. The drawings were **not updated** after the build changed three things: the laptop main screen is side-by-side, the phone date and location controls sit in a bottom bar with an added About link, and a Back control and a Cloudy condition were added. `spec.md` Revisions record each change, and `spec.md` says to update the drawings when a material layout changes | Open | Developer decides: redraw or annotate the main screen (phone and laptop) as built, or accept the Revisions entries as the record |
+| 5 | Approved `plan.md` (approach, ordered tasks, verification) | Approved; all checklist items tracked | Done | none |
+| 6 | Chat transcripts from research, specification, and planning | `transcripts/research-...`, `spec-...`, `plan-2026-10-04_...` | Done | none |
+
+### Phase 2: build, test, revise
+
+| # | Brief deliverable | Evidence | Status | To close |
+|---|---|---|---|---|
+| 1 | Working app built through tested checkpoints, with commit history and updated `spec.md` and `plan.md` | Eight checkpoints, each committed after Developer verification; Revisions entries in both documents | Done | none |
+| 2 | App deployed at a public HTTPS address matching the approved specification | https://thearkx60.github.io/unit-3-weather/ (GitHub Pages, HTTPS enforced); behavior checked requirement by requirement above | Done | none |
+| 3 | Usability notes from three peers in `plan.md`, with findings and the resulting improvement | Session records, findings table with counts, and two improvements built and verified live (no recordings; stated in the notes) | Done | none |
+| 4 | Completed debrief | `debrief.md` is not in the repository yet; the brief says to add the provided file and follow it | Open | Developer adds `debrief.md`; the debrief conversation follows |
+| 5 | Chat transcripts from implementation and debrief | Implementation transcript not saved yet; debrief not held yet | Open | Developer enters `save transcript` at the end of this chat; repeat after the debrief |
+
+### Also confirmed (brief: sources, privacy information, asset credits)
+
+| Item | Where |
+|---|---|
+| Creator, weather source, recommendation methods and sources, privacy practices, art credits and licenses | About screen on the live app (R15, R27, R28 verified) |
+| Asset license text | `assets/license.md` (CC0 pack) and `assets/icons/README.md` (Apache 2.0 icons) |
+| No secrets in the repository | Scanned before the first push and again by pattern search; only the rule text in `AGENTS.md` matched |
+
 ## Usability testing
 
 Before testing, record the purpose, a few realistic tasks, non-leading prompts, and a consistent note format. For each session, use a non-identifying label and record the task, what the tester did or said, successes, barriers or questions, and possible changes. Keep observations separate from interpretations. After all three sessions, summarize the strongest findings and the improvement they support.
