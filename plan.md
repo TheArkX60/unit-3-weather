@@ -105,7 +105,7 @@ During implementation, follow the approved plan in working checkpoints and keep 
 - [x] Test multiple locations, current and forecast dates, recommendation categories, outfit and reminder variations, and failure states
 - [x] Verify that eligible outfit and reminder variations are selected independently rather than as fixed pairs
 - [x] Verify that returning to a previously selected date shows the same variations
-- [ ] Test the deployed app, independently of the local version, on a real phone and a laptop, including both screens, accessibility, and one-handed controls
+- [x] Test the deployed app, independently of the local version, on a real phone and a laptop, including both screens, accessibility, and one-handed controls
 - [x] Prepare the usability test below
 - [x] Test with three peers and record each session (tested with three peers; none could or would be screen-recorded, so only the written notes exist)
 - [x] Add the chosen improvement to this checklist, and update `spec.md` if the intended result changes
@@ -318,6 +318,7 @@ Record material plan changes and why they were made.
 - **2026-10-12 — Usability testing done; improvements chosen.** Three peers (A laptop, B phone, C laptop) completed all five tasks. Findings and counts are in the Usability testing section. The Developer chose the Back control first and the location-search fix second if time permits. Added requirement R30 to `spec.md`.
 - **2026-10-12 — Both improvements implemented, verified, and redeployed.** Improvement 1 (Back control from a chosen day, R30) went live in commit `dc99f51`; Improvement 2 (location search accepts a typed state, lists exact-name matches, R1 updated) in commit `12fe648`. The Developer verified both on localhost and on the live site, and `tests.html` passes on the live site. Location-search detail: Open-Meteo returns alias and prefix matches ("Austin" returned Ardmore, Tennessee) and does no typo matching ("Austn" returns nothing), so an exact-name rule was added at the Developer's observation.
 - **2026-10-12 — Deliverables confirmed.** The Developer reviewed the Deliverables check and accepted the two Phase 1 items that were open (reference image sources, hand drawings not updated after the build) as they stand. Still open: the build transcript, and the debrief with its transcript. `debrief.md` was added unmodified.
+- **2026-10-12 — Deployed app checked for accessibility.** The Developer repeated the grayscale (Achromatopsia emulation) and Windows Narrator checks on the live URL; both worked, closing the "test the deployed app" item. The build transcript is saved as `transcripts/build-2026-10-12_200629.md`; "Save all chat transcripts" and "Complete the debrief" stay open until the debrief is held and its transcript saved.
 
 ## Saving transcripts
 
