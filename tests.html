@@ -13,6 +13,7 @@
   import { conditionFor, temperatureBandFor, remindersFor, buildState, dayFromForecast } from './js/state.js';
   import { resolveVariants } from './js/variants.js';
   import { toggleDate, tripDatesFromHash, isListHash } from './js/selection.js';
+  import { parseSearch, filterByState, lookupState } from './js/search.js';
   import { summaryFor } from './js/state.js';
   import { recommendationText, reminderText, dateLabel, temperatureRangeText } from './js/text.js';
   import { saveLocation, loadLocation, clearLocation, labelFor, fromMatch } from './js/location.js';
@@ -193,6 +194,46 @@
   const before = Object.keys(JSON.parse(JSON.stringify(localStorage)));
   summaryFor(day());
   check('summaryFor writes nothing to localStorage', Object.keys(JSON.parse(JSON.stringify(localStorage))), before);
+
+  section('Location search parsing (Improvement 2)');
+  const states = {
+    AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California', CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware',
+    FL: 'Florida', GA: 'Georgia', HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois', IN: 'Indiana', IA: 'Iowa', KS: 'Kansas', KY: 'Kentucky',
+    LA: 'Louisiana', ME: 'Maine', MD: 'Maryland', MA: 'Massachusetts', MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi', MO: 'Missouri',
+    MT: 'Montana', NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey', NM: 'New Mexico', NY: 'New York',
+    NC: 'North Carolina', ND: 'North Dakota', OH: 'Ohio', OK: 'Oklahoma', OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island',
+    SC: 'South Carolina', SD: 'South Dakota', TN: 'Tennessee', TX: 'Texas', UT: 'Utah', VT: 'Vermont', VA: 'Virginia', WA: 'Washington',
+    WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming', DC: 'District of Columbia',
+  };
+  const allStates = (makeQuery, makeExpected) => Object.entries(states).every(([abbr, name]) =>
+    JSON.stringify(parseSearch(makeQuery(abbr, name))) === JSON.stringify(makeExpected(name)));
+  check('51 states: "Test TX" (abbreviation, no comma)', allStates((a) => `Test ${a}`, (n) => ({ city: 'Test', state: n })), true);
+  check('51 states: "Test, TX" (abbreviation, comma)', allStates((a) => `Test, ${a}`, (n) => ({ city: 'Test', state: n })), true);
+  check('51 states: "Test Texas" (full name, no comma)', allStates((a, n) => `Test ${n}`, (n) => ({ city: 'Test', state: n })), true);
+  check('51 states: "Test, Texas" (full name, comma)', allStates((a, n) => `Test, ${n}`, (n) => ({ city: 'Test', state: n })), true);
+  check('51 states: lowercase "test tx"', allStates((a) => `test ${a.toLowerCase()}`, (n) => ({ city: 'test', state: n })), true);
+  check('Austin TX (the tester case)', parseSearch('Austin TX'), { city: 'Austin', state: 'Texas' });
+  check('Austin, TX', parseSearch('Austin, TX'), { city: 'Austin', state: 'Texas' });
+  check('Austin Texas', parseSearch('Austin Texas'), { city: 'Austin', state: 'Texas' });
+  check('Springfield MO', parseSearch('Springfield MO'), { city: 'Springfield', state: 'Missouri' });
+  check('Austin alone has no state', parseSearch('Austin'), { city: 'Austin', state: null });
+  check('multi-word city: Kansas City MO', parseSearch('Kansas City MO'), { city: 'Kansas City', state: 'Missouri' });
+  check('multi-word city, word is also a state: Kansas City Kansas', parseSearch('Kansas City Kansas'), { city: 'Kansas City', state: 'Kansas' });
+  check('city named like a state, with state: New York NY', parseSearch('New York NY'), { city: 'New York', state: 'New York' });
+  check('New York alone stays a city', parseSearch('New York'), { city: 'New York', state: null });
+  check('Washington alone stays a city', parseSearch('Washington'), { city: 'Washington', state: null });
+  check('Washington DC', parseSearch('Washington DC'), { city: 'Washington', state: 'District of Columbia' });
+  check('Washington, D.C.', parseSearch('Washington, D.C.'), { city: 'Washington', state: 'District of Columbia' });
+  check('three-word state: Test District of Columbia', parseSearch('Test District of Columbia'), { city: 'Test', state: 'District of Columbia' });
+  check('Austin, TX, USA ignores the country', parseSearch('Austin, TX, USA'), { city: 'Austin', state: 'Texas' });
+  check('unknown text after a comma is ignored', parseSearch('Austin, Narnia'), { city: 'Austin', state: null });
+  check('extra spaces are tidied', parseSearch('  Austin    TX  '), { city: 'Austin', state: 'Texas' });
+  check('city ending in a non-state word: Virginia Beach', parseSearch('Virginia Beach'), { city: 'Virginia Beach', state: null });
+  check('lookupState rejects non-states', [lookupState('XX'), lookupState('Texasland')], [null, null]);
+  const sample = [{ name: 'Springfield', admin1: 'Missouri' }, { name: 'Wilbraham', admin1: 'Massachusetts' }, { name: 'Springfield', admin1: 'Illinois' }];
+  check('filterByState keeps only that state', filterByState(sample, 'Missouri').map((r) => r.name + '/' + r.admin1), ['Springfield/Missouri']);
+  check('filterByState with no state keeps everything', filterByState(sample, null).length, 3);
+  check('filterByState with no match is empty (-> "Character not found")', filterByState(sample, 'Texas'), []);
 
   out.insertAdjacentHTML('beforeend', `\n<b>${failures === 0 ? 'ALL TESTS PASSED' : failures + ' FAILED'}</b>\n`);
   const summary = document.getElementById('summary');

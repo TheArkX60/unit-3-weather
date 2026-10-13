@@ -2,9 +2,12 @@
 const GEOCODE_URL = 'https://geocoding-api.open-meteo.com/v1/search';
 const FORECAST_URL = 'https://api.open-meteo.com/v1/forecast';
 
-/** Resolve a place name to US matches: [{ name, admin1, latitude, longitude }]. */
-export async function geocode(query) {
-  const params = new URLSearchParams({ name: query, count: 5, language: 'en', format: 'json' });
+/**
+ * Resolve a place name to US matches: [{ name, admin1, latitude, longitude }].
+ * `count` is how many results to ask Open-Meteo for before keeping the US ones.
+ */
+export async function geocode(query, count = 10) {
+  const params = new URLSearchParams({ name: query, count, language: 'en', format: 'json' });
   const res = await fetch(`${GEOCODE_URL}?${params}`);
   if (!res.ok) throw new Error(`Geocoding failed: ${res.status}`);
   const data = await res.json();
