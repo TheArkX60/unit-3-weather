@@ -109,9 +109,9 @@ During implementation, follow the approved plan in working checkpoints and keep 
 - [x] Prepare the usability test below
 - [x] Test with three peers and record each session (tested with three peers; none could or would be screen-recorded, so only the written notes exist)
 - [x] Add the chosen improvement to this checklist, and update `spec.md` if the intended result changes
-  - [ ] Improvement 1: Back control from a specific day to the date picker or trip overview (R30)
-  - [ ] Improvement 2, if time permits: location search accepts "City ST" and "City State" and no longer returns a wrong-state place
-- [ ] Implement, verify, and redeploy at least one meaningful revision
+  - [x] Improvement 1: Back control from a specific day to the date picker or trip overview (R30)
+  - [x] Improvement 2, if time permits: location search accepts "City ST" and "City State" and no longer returns a wrong-state place
+- [x] Implement, verify, and redeploy at least one meaningful revision
 
 ### Deliver
 
@@ -283,6 +283,7 @@ Record material plan changes and why they were made.
 - **2026-10-11 — Developer ticked the build checklist and "Check every specification requirement".** The drawings guided the layout, with the recorded deviations (laptop side-by-side, phone bottom bar, Cloudy added). R25 rests on the Agent's static scan of the deployed files, which the Developer accepted. Left open: repeating the accessibility checks on the deployed URL (Narrator and grayscale were run on the local build of the same code).
 - **2026-10-11 — Usability test prepared and approved by the Developer.** Purpose, five tasks, neutral prompts, and the session note format are in the Usability testing section. Sessions run against the live app, which includes the Cloudy condition as of commit `3325ac9`.
 - **2026-10-12 — Usability testing done; improvements chosen.** Three peers (A laptop, B phone, C laptop) completed all five tasks. Findings and counts are in the Usability testing section. The Developer chose the Back control first and the location-search fix second if time permits. Added requirement R30 to `spec.md`.
+- **2026-10-12 — Both improvements implemented, verified, and redeployed.** Improvement 1 (Back control from a chosen day, R30) went live in commit `dc99f51`; Improvement 2 (location search accepts a typed state, lists exact-name matches, R1 updated) in commit `12fe648`. The Developer verified both on localhost and on the live site, and `tests.html` passes on the live site. Location-search detail: Open-Meteo returns alias and prefix matches ("Austin" returned Ardmore, Tennessee) and does no typo matching ("Austn" returns nothing), so an exact-name rule was added at the Developer's observation.
 
 ## Saving transcripts
 
