@@ -115,7 +115,7 @@ During implementation, follow the approved plan in working checkpoints and keep 
 
 ### Deliver
 
-- [ ] Confirm all brief deliverables, sources, privacy information, and asset credits
+- [x] Confirm all brief deliverables, sources, privacy information, and asset credits
 - [ ] Save all chat transcripts
 - [ ] Complete the debrief
 
@@ -175,9 +175,9 @@ Checked against `brief.md` on 2026-10-12. **Done** means the item exists in the 
 | # | Brief deliverable | Evidence | Status | To close |
 |---|---|---|---|---|
 | 1 | Approved `research.md` (context of use, user story, reference observations, weather and technical sources, decisions, art estimate) | Approved 2026-10-04; all listed sections present | Done | none |
-| 2 | 5-10 reference images in `reference/`, each with its **source** and observation in `research.md` | 5 images in `reference/`; `research.md` records an observation for each and names the app, but gives no source beyond that (where or when each screenshot was taken, or a link) | Open | Developer adds a one-line source for each of the 5 (for example "screenshot of the Apple Weather iOS app, taken <date>", or the store or page link) |
+| 2 | 5-10 reference images in `reference/`, each with its **source** and observation in `research.md` | 5 images in `reference/`; `research.md` records an observation for each and names the app, but gives no source beyond that (where or when each screenshot was taken, or a link) | Accepted as is by the Developer (2026-10-12) | none; the Developer judged the app names and observations sufficient. Adding a one-line source for each image would still tighten it |
 | 3 | Approved `spec.md` (goal, requirements with acceptance checks, state, variation, assets, out of scope) | Approved 2026-10-04; every later change is a dated entry under Revisions | Done | none |
-| 4 | Hand-drawn phone and laptop designs for every proposed screen, in `reference/`, linked in `spec.md` | `App drawing.PNG` and `App drawing 2.jpg`, linked in `spec.md`. The drawings were **not updated** after the build changed three things: the laptop main screen is side-by-side, the phone date and location controls sit in a bottom bar with an added About link, and a Back control and a Cloudy condition were added. `spec.md` Revisions record each change, and `spec.md` says to update the drawings when a material layout changes | Open | Developer decides: redraw or annotate the main screen (phone and laptop) as built, or accept the Revisions entries as the record |
+| 4 | Hand-drawn phone and laptop designs for every proposed screen, in `reference/`, linked in `spec.md` | `App drawing.PNG` and `App drawing 2.jpg`, linked in `spec.md`. The drawings were **not updated** after the build changed three things: the laptop main screen is side-by-side, the phone date and location controls sit in a bottom bar with an added About link, and a Back control and a Cloudy condition were added. `spec.md` Revisions record each change, and `spec.md` says to update the drawings when a material layout changes | Accepted as is by the Developer (2026-10-12) | none; the `spec.md` Revisions entries remain the record of the changes from the drawings |
 | 5 | Approved `plan.md` (approach, ordered tasks, verification) | Approved; all checklist items tracked | Done | none |
 | 6 | Chat transcripts from research, specification, and planning | `transcripts/research-...`, `spec-...`, `plan-2026-10-04_...` | Done | none |
 
@@ -188,7 +188,7 @@ Checked against `brief.md` on 2026-10-12. **Done** means the item exists in the 
 | 1 | Working app built through tested checkpoints, with commit history and updated `spec.md` and `plan.md` | Eight checkpoints, each committed after Developer verification; Revisions entries in both documents | Done | none |
 | 2 | App deployed at a public HTTPS address matching the approved specification | https://thearkx60.github.io/unit-3-weather/ (GitHub Pages, HTTPS enforced); behavior checked requirement by requirement above | Done | none |
 | 3 | Usability notes from three peers in `plan.md`, with findings and the resulting improvement | Session records, findings table with counts, and two improvements built and verified live (no recordings; stated in the notes) | Done | none |
-| 4 | Completed debrief | `debrief.md` is not in the repository yet; the brief says to add the provided file and follow it | Open | Developer adds `debrief.md`; the debrief conversation follows |
+| 4 | Completed debrief | `debrief.md` was added to the repository on 2026-10-12, unmodified; the debrief itself has not been held (it runs in a separate fresh chat) | Open | Developer starts a fresh chat with the command in `debrief.md` |
 | 5 | Chat transcripts from implementation and debrief | Implementation transcript not saved yet; debrief not held yet | Open | Developer enters `save transcript` at the end of this chat; repeat after the debrief |
 
 ### Also confirmed (brief: sources, privacy information, asset credits)
@@ -317,6 +317,7 @@ Record material plan changes and why they were made.
 - **2026-10-11 — Usability test prepared and approved by the Developer.** Purpose, five tasks, neutral prompts, and the session note format are in the Usability testing section. Sessions run against the live app, which includes the Cloudy condition as of commit `3325ac9`.
 - **2026-10-12 — Usability testing done; improvements chosen.** Three peers (A laptop, B phone, C laptop) completed all five tasks. Findings and counts are in the Usability testing section. The Developer chose the Back control first and the location-search fix second if time permits. Added requirement R30 to `spec.md`.
 - **2026-10-12 — Both improvements implemented, verified, and redeployed.** Improvement 1 (Back control from a chosen day, R30) went live in commit `dc99f51`; Improvement 2 (location search accepts a typed state, lists exact-name matches, R1 updated) in commit `12fe648`. The Developer verified both on localhost and on the live site, and `tests.html` passes on the live site. Location-search detail: Open-Meteo returns alias and prefix matches ("Austin" returned Ardmore, Tennessee) and does no typo matching ("Austn" returns nothing), so an exact-name rule was added at the Developer's observation.
+- **2026-10-12 — Deliverables confirmed.** The Developer reviewed the Deliverables check and accepted the two Phase 1 items that were open (reference image sources, hand drawings not updated after the build) as they stand. Still open: the build transcript, and the debrief with its transcript. `debrief.md` was added unmodified.
 
 ## Saving transcripts
 
